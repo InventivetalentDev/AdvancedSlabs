@@ -55,7 +55,7 @@ public class EditorWand extends AdvancedSlabItem {
 	@Override
 	public Recipe getRecipe() {
 		return //
-				new ShapedRecipeBuilder(getItem()).withShape("rsr", "rsr", " s ").withIngredient('r', Material.REDSTONE).withIngredient('s', Material.STICK)//
+				new ShapedRecipeBuilder(getItem()).withShape("rdr", "rsr", " s ").withIngredient('r', Material.REDSTONE).withIngredient('s', Material.STICK)//
 						.fromConfig(AdvancedSlabs.instance.getConfig().getConfigurationSection("recipes.editor.wand"))//
 						.build();
 	}

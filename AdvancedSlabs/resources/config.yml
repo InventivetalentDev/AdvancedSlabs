@@ -16,10 +16,12 @@ recipes:
   editor:
     wand:
       shape:
-      - "rsr"
+      - "rdr"
       - "rsr"
       - " s "
       ingredients:
+        d:
+          type: "DIAMOND"
         r:
           type: "REDSTONE"
         s:
