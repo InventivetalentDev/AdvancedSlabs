@@ -24,15 +24,6 @@ recipes:
           type: "REDSTONE"
         s:
           type: "STICK"
-  placement:
-    block:
-      shape:
-      - "rrr"
-      - "rbr" ## b will get replaced with the used slab-material
-      - "rrr"
-      ingredients:
-        r:
-          type: "REDSTONE"
 messages:
   editor:
     editing: "&aYou are now editing this block."
