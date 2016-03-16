@@ -39,11 +39,13 @@ import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
+import org.inventivetalent.advancedslabs.AdvancedSlabs;
 import org.inventivetalent.advancedslabs.EntityHelper;
 import org.inventivetalent.reflection.minecraft.Minecraft;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
+import java.util.logging.Level;
 
 public class AdvancedSlab {
 
@@ -57,6 +59,8 @@ public class AdvancedSlab {
 	private ArmorStand        armorStand;
 	private Shulker           shulker;
 	private ISlabFallingBlock fallingBlock;
+
+	public UUID owner;
 
 	public boolean despawned = false;
 
@@ -99,6 +103,14 @@ public class AdvancedSlab {
 		this.armorStandUUID = UUID.fromString(jsonObject.get("armorstand").getAsString());
 		this.shulkerUUID = UUID.fromString(jsonObject.get("shulker").getAsString());
 		this.fallingBlockUUID = UUID.fromString(jsonObject.get("fallingblock").getAsString());
+
+		if (AdvancedSlabs.instance.getConfig().getBoolean("slabOwners") && jsonObject.has("owner")) {
+			try {
+				this.owner = UUID.fromString(jsonObject.get("owner").getAsString());
+			} catch (Exception e) {
+				AdvancedSlabs.instance.getLogger().log(Level.WARNING, "Invalid owner", e);
+			}
+		}
 
 		refreshEntities();
 		//		AdvancedSlabs.instance.fallingBlockResetTask.fallingBlocks.add(getFallingBlock());
@@ -250,6 +262,10 @@ public class AdvancedSlab {
 		jsonObject.addProperty("shulker", shulkerUUID.toString());
 		jsonObject.addProperty("armorstand", armorStandUUID.toString());
 		jsonObject.addProperty("fallingblock", fallingBlockUUID != null ? fallingBlockUUID.toString() : null);
+
+		if (AdvancedSlabs.instance.getConfig().getBoolean("slabOwners") && this.owner != null) {
+			jsonObject.addProperty("owner", this.owner.toString());
+		}
 
 		return jsonObject;
 	}

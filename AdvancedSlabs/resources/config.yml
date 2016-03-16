@@ -1,8 +1,8 @@
 # Amount of slab-items returned when converting a normal block
 slabRatio: 1
 
-
-
+# Enable owners of slabs (only owners or players with permission "advancedslabs.editall" can edit the slab)
+slabOwners: true
 
 items:
   editor:
@@ -41,5 +41,6 @@ messages:
     locationInfo: "&ex: &7%s&e, y: &7%s&e, Z: &7%s"
     error:
       solidBlock: "&eSorry, you cannot place this block above a solid block."
+      noPermission: "&cYou cannot edit this block."
   # Prefix for block items (e.g. &bAdvancedSlab: &eSTONE)
   blockPrefix: "&bAdvancedSlab: &e"

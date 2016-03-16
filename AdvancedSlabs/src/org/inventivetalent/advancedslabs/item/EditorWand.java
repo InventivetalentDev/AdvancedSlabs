@@ -115,7 +115,12 @@ public class EditorWand extends AdvancedSlabItem {
 	public void handleEntityInteract(PlayerInteractEntityEvent event) {
 		final AdvancedSlab slab = AdvancedSlabs.instance.slabManager.getSlabForEntity(event.getRightClicked());
 		if (slab != null) {
-			//TODO: slab owners
+			if (AdvancedSlabs.instance.getConfig().getBoolean("slabOwners")) {
+				if (slab.owner != null && !slab.owner.equals(event.getPlayer().getUniqueId()) && !event.getPlayer().hasPermission("advancedslabs.editall")) {
+					event.getPlayer().sendMessage(AdvancedSlabs.instance.messages.getMessage("editor.error.noPermission"));
+					return;
+				}
+			}
 			if (event.getPlayer().isSneaking()) {
 				AdvancedSlabs.instance.editorManager.removeEditor(event.getPlayer().getUniqueId());
 				AdvancedSlabs.instance.slabManager.removeSlab(slab);

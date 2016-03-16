@@ -34,6 +34,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.inventivetalent.advancedslabs.AdvancedSlabs;
+import org.inventivetalent.advancedslabs.slab.AdvancedSlab;
 
 public class AdvancedSlabBlock extends AdvancedSlabItem {
 	@Override
@@ -63,7 +64,10 @@ public class AdvancedSlabBlock extends AdvancedSlabItem {
 						event.setCancelled(true);
 						event.setBuild(false);
 
-						AdvancedSlabs.instance.slabManager.createSlab(event.getBlockPlaced().getLocation().add(.5, 0, .5), itemStack.getType(), itemStack.getData().getData());
+						AdvancedSlab slab = AdvancedSlabs.instance.slabManager.createSlab(event.getBlockPlaced().getLocation().add(.5, 0, .5), itemStack.getType(), itemStack.getData().getData());
+						if (AdvancedSlabs.instance.getConfig().getBoolean("slabOwners")) {
+							slab.owner = event.getPlayer().getUniqueId();
+						}
 					}
 				}
 			}
