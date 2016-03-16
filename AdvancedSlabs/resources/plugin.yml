@@ -1,0 +1,10 @@
+name: AdvancedSlabs
+main: org.inventivetalent.advancedslabs.AdvancedSlabs
+author: inventivetalent
+version: ${project.version}
+
+softdepend: [PacketListenerApi, MenuBuilder, ItemBuilder, RecipeBuilder, MessageBuilder, EntityAnimationAPI]
+
+commands:
+  advancedslabs:
+    aliases: [as, aslab]

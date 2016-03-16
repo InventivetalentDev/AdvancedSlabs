@@ -1,0 +1,45 @@
+# Amount of slab-items returned when converting a normal block
+slabRatio: 1
+
+
+
+
+items:
+  editor:
+    wand:
+      type: "STICK"
+      meta:
+        display: "&bEditor Wand"
+        lore:
+        - "&7Right-Click to edit!"
+recipes:
+  editor:
+    wand:
+      shape:
+      - "rsr"
+      - "rsr"
+      - " s "
+      ingredients:
+        r:
+          type: "REDSTONE"
+        s:
+          type: "STICK"
+  placement:
+    block:
+      shape:
+      - "rrr"
+      - "rbr" ## b will get replaced with the used slab-material
+      - "rrr"
+      ingredients:
+        r:
+          type: "REDSTONE"
+messages:
+  editor:
+    editing: "&aYou are now editing this block."
+    finished: "&aYou are no longer editing."
+    scrollSteps: "&eSteps: &7%s"
+    locationInfo: "&ex: &7%s&e, y: &7%s&e, Z: &7%s"
+    error:
+      solidBlock: "&eSorry, you cannot place this block above a solid block."
+  # Prefix for block items (e.g. &bAdvancedSlab: &eSTONE)
+  blockPrefix: "&bAdvancedSlab: &e"
