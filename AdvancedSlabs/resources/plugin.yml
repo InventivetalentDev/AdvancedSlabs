@@ -3,7 +3,7 @@ main: org.inventivetalent.advancedslabs.AdvancedSlabs
 author: inventivetalent
 version: ${project.version}
 
-softdepend: [PacketListenerApi, MenuBuilder, ItemBuilder, RecipeBuilder, MessageBuilder, EntityAnimationAPI]
+softdepend: [PacketListenerApi, MenuBuilder, ItemBuilder, RecipeBuilder, MessageBuilder, GlowAPI, ReflectionHelper, APIManager]
 
 commands:
   advancedslabs:
