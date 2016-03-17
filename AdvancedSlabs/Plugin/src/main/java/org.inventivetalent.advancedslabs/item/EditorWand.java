@@ -47,7 +47,8 @@ public class EditorWand extends AdvancedSlabItem {
 	@Override
 	public ItemStack getItem() {
 		return//
-				new ItemBuilder(Material.STICK).buildMeta().withDisplayName("§aEditor Wand").withLore("§7Right-Click Blocks to edit!").item()//
+				new ItemBuilder()//
+						.withType(Material.STICK).buildMeta().withDisplayName("§aEditor Wand").withLore("§7Right-Click Blocks to edit!").item()//
 						.fromConfig(AdvancedSlabs.instance.getConfig().getConfigurationSection("items.editor.wand"))//
 						.build();
 	}
