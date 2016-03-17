@@ -26,83 +26,20 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.advancedslabs.slab;
+package org.inventivetalent.advancedslabs.entity;
 
-import net.minecraft.server.v1_9_R1.Entity;
-import net.minecraft.server.v1_9_R1.EntityFallingBlock;
-import net.minecraft.server.v1_9_R1.IBlockData;
-import net.minecraft.server.v1_9_R1.World;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_9_R1.CraftWorld;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 
-import java.util.UUID;
-
-public class SlabEntityFallingSand extends EntityFallingBlock implements ISlabFallingBlock {
-
-	public SlabEntityFallingSand(World world) {
-		super(world);
-	}
-
-	public SlabEntityFallingSand(World world, double d0, double d1, double d2, IBlockData iblockdata) {
-		super(world, d0, d1, d2, iblockdata);
-	}
+public class EntitySpawner_v1_9_R1 implements IEntitySpawner {
 
 	@Override
-	public UUID getUniqueId() {
-		return this.uniqueID;
+	public ISlabFallingBlock spawnFallingBlock(Location location, Material material, byte data) {
+		SlabEntityFallingSand_v1_9_R1 entity = new SlabEntityFallingSand_v1_9_R1(((CraftWorld) location.getWorld()).getHandle(), location.getX(), location.getY(), location.getZ(), net.minecraft.server.v1_9_R1.Block.getById(material.getId()).fromLegacyData(data));
+		((CraftWorld) location.getWorld()).getHandle().addEntity(entity, CreatureSpawnEvent.SpawnReason.CUSTOM);
+		return entity;
 	}
 
-	@Override
-	public void setTicksLived(int ticksLived) {
-		this.ticksLived = ticksLived;
-	}
-
-	@Override
-	public void setDropItem(boolean dropItem) {
-		this.dropItem = dropItem;
-	}
-
-	@Override
-	public void setCustomName(String s) {
-		super.setCustomName(s);
-	}
-
-	@Override
-	public void setCustomNameVisible(boolean flag) {
-		super.setCustomNameVisible(flag);
-	}
-
-	@Override
-	public boolean isDead() {
-		return !super.isAlive();
-	}
-
-	@Override
-	public void teleport(Location location) {
-		super.teleportTo(location, false);
-	}
-
-	@Override
-	public void remove() {
-		die();
-	}
-
-	@Override
-	public void eject() {
-	}
-
-	@Override
-	public void setRiding(Object vehicle) {
-		super.a((Entity) vehicle, true);
-	}
-
-	@Override
-	public void stopRiding() {
-		super.stopRiding();
-	}
-
-	@Override
-	public void m() {
-		//		super.m();
-		//Ignore any updates.
-	}
 }

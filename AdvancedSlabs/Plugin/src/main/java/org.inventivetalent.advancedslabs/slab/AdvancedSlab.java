@@ -32,15 +32,14 @@ import com.google.gson.JsonObject;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_9_R1.CraftWorld;
 import org.bukkit.entity.*;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import org.inventivetalent.advancedslabs.AdvancedSlabs;
 import org.inventivetalent.advancedslabs.EntityHelper;
+import org.inventivetalent.advancedslabs.entity.ISlabFallingBlock;
 import org.inventivetalent.reflection.minecraft.Minecraft;
 
 import javax.annotation.Nullable;
@@ -137,10 +136,8 @@ public class AdvancedSlab {
 		}
 	}
 
-	protected ISlabFallingBlock spawnFallingBlock(Location location, Material material, byte data) {
-		SlabEntityFallingSand entity = new SlabEntityFallingSand(((CraftWorld) location.getWorld()).getHandle(), location.getX(), location.getY(), location.getZ(), net.minecraft.server.v1_9_R1.Block.getById(material.getId()).fromLegacyData(data));
-		((CraftWorld) location.getWorld()).getHandle().addEntity(entity, CreatureSpawnEvent.SpawnReason.CUSTOM);
-		return entity;
+	ISlabFallingBlock spawnFallingBlock(Location location, Material material, byte data) {
+		return AdvancedSlabs.instance.entityManager.spawnFallingBlock(location, material, data);
 	}
 
 	public MaterialData getMaterialData() {
@@ -221,7 +218,10 @@ public class AdvancedSlab {
 
 	public void despawn() {
 		despawned = true;
-		if (getFallingBlock() != null) { getFallingBlock().remove(); }
+		if (getFallingBlock() != null) {
+			getFallingBlock().allowDeath();
+			getFallingBlock().remove();
+		}
 		if (getShulker() != null) { getShulker().remove(); }
 		if (getArmorStand() != null) { getArmorStand().remove(); }
 	}

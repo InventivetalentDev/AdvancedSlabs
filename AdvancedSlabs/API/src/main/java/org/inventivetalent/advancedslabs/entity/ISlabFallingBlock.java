@@ -26,34 +26,10 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.advancedslabs.slab;
+package org.inventivetalent.advancedslabs.entity;
 
-import org.bukkit.Location;
-
-import java.util.UUID;
-
-public interface ISlabFallingBlock {
-
-	UUID getUniqueId();
-
-	void setTicksLived(int ticksLived);
+public interface ISlabFallingBlock extends ISlabEntity {
 
 	void setDropItem(boolean dropItem);
-
-	void setCustomName(String customName);
-
-	void setCustomNameVisible(boolean customNameVisible);
-
-	boolean isDead();
-
-	void teleport(Location location);
-
-	void remove();
-
-	void eject();
-
-	void stopRiding();
-
-	void setRiding(Object vehicle);
 
 }

@@ -49,6 +49,7 @@ public class FallingBlockResetTask extends BukkitRunnable {
 				iterator.remove();
 				continue;
 			}
+			if(next.getFallingBlock()!=null)
 			if (next.getFallingBlock() == null || next.getFallingBlock().isDead()) {
 				next.respawnFallingBlock();
 			}

@@ -35,7 +35,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -70,6 +72,7 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 	public SlabManager   slabManager;
 	public EditorManager editorManager;
 	public ItemManager   itemManager;
+	public EntityManager entityManager;
 
 	public MessageContainer messages;
 
@@ -103,6 +106,7 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 		this.slabManager = new SlabManager(this);
 		this.editorManager = new EditorManager(this);
 		this.itemManager = new ItemManager(this);
+		this.entityManager = new EntityManager(this);
 
 		this.fallingBlockResetTask = new FallingBlockResetTask(this);
 		this.fallingBlockResetTask.runTaskTimer(this, 20, 20);
@@ -212,8 +216,17 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 	public void on(EntityDeathEvent event) {
 		AdvancedSlab slab = slabManager.getSlabForEntity(event.getEntity());
 		if (slab != null) {
-			slabManager.removeSlab(slab);
+			if (slab.despawned) {
+				slabManager.removeSlab(slab);
+			} else {
+			}
 		}
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void on(CreatureSpawnEvent event) {
+		System.out.println(event);
+		System.out.println(event.isCancelled());
 	}
 
 	public Team getCollisionTeam() {
