@@ -16,6 +16,7 @@ items:
         display: "&bEditor Wand"
         lore:
         - "&7Right-Click to edit!"
+        - "&7Shift right-click to remove"
 recipes:
   editor:
     wand:
