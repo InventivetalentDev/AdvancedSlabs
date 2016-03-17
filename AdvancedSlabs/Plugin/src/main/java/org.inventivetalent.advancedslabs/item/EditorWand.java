@@ -166,7 +166,6 @@ public class EditorWand extends AdvancedSlabItem {
 					}
 				}, 2);
 			} else {
-				System.out.println(slab.getLocation());
 				AdvancedSlabs.instance.editorManager.newEditor(event.getPlayer().getUniqueId(), slab);
 				event.getPlayer().sendMessage(AdvancedSlabs.instance.messages.getMessage("editor.editing"));
 			}
