@@ -38,6 +38,7 @@ import org.inventivetalent.advancedslabs.AdvancedSlabs;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.UUID;
 
 public class SlabManager {
 
@@ -64,8 +65,12 @@ public class SlabManager {
 	}
 
 	public AdvancedSlab getSlabForEntity(Entity entity) {
+		return getSlabForUUID(entity.getUniqueId());
+	}
+
+	public AdvancedSlab getSlabForUUID(UUID uuid) {
 		for (AdvancedSlab slab : slabs) {
-			if (slab.getArmorStandUUID().equals(entity.getUniqueId()) || slab.getShulkerUUID().equals(entity.getUniqueId()) || slab.getFallingBlockUUID().equals(entity.getUniqueId())) {
+			if (slab.getArmorStandUUID().equals(uuid) || slab.getShulkerUUID().equals(uuid) || slab.getFallingBlockUUID().equals(uuid)) {
 				return slab;
 			}
 		}

@@ -75,6 +75,8 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 	public ItemManager   itemManager;
 	public EntityManager entityManager;
 
+	public PacketListener packetListener;
+
 	public MessageContainer messages;
 
 	public FallingBlockResetTask fallingBlockResetTask;
@@ -109,6 +111,8 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 		this.itemManager = new ItemManager(this);
 		this.entityManager = new EntityManager(this);
 
+		this.packetListener = new PacketListener(this);
+
 		this.fallingBlockResetTask = new FallingBlockResetTask(this);
 		this.fallingBlockResetTask.runTaskTimer(this, 20, 20);
 
@@ -129,8 +133,8 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 				.withMessage("editor.locationInfo", "§ex: §7%x§e, y: §7%s§e, z: §7%s")//
 				.withMessage("highlight", "§aHighlighted nearby slabs")//
 				.withMessage("respawn", "§aRespawned nearby slab entities")//
-				.withMessage("error.invalidMaterial","§cInvalid Material: %s")//
-				.withMessage("error.notOnline","§cPlayer %s is not online")//
+				.withMessage("error.invalidMaterial", "§cInvalid Material: %s")//
+				.withMessage("error.notOnline", "§cPlayer %s is not online")//
 				;
 		this.messages = messageBuilder.fromConfig(getConfig().getConfigurationSection("messages")).build();
 
@@ -159,6 +163,10 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 	public void onDisable() {
 		getLogger().info("Saving data...");
 		saveSlabs();
+
+		if (this.packetListener != null) {
+			this.packetListener.disable();
+		}
 	}
 
 	@EventHandler
