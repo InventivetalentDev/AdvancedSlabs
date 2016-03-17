@@ -191,17 +191,27 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 	public List<String> onTabComplete(CommandSender sender, Command command, String s, String[] args) {
 		List<String> list = new ArrayList<>();
 
-		if (sender.hasPermission("advancedslabs.wand")) {
-			list.add("wand");
-		}
-		if (sender.hasPermission("advancedslabs.highlight")) {
-			list.add("highlight");
-		}
-		if (sender.hasPermission("advancedslabs.reload")) {
-			list.add("reload");
-		}
-		if (sender.hasPermission("advancedslabs.give")) {
-			list.add("give");
+		if(args.length<=1) {
+			if (sender.hasPermission("advancedslabs.wand")) {
+				list.add("wand");
+			}
+			if (sender.hasPermission("advancedslabs.highlight")) {
+				list.add("highlight");
+			}
+			if (sender.hasPermission("advancedslabs.reload")) {
+				list.add("reload");
+			}
+			if (sender.hasPermission("advancedslabs.give")) {
+				list.add("give");
+			}
+		}else{
+			if ("give".equalsIgnoreCase(args[0])) {
+				if (sender.hasPermission("advancedslabs.give")) {
+					for (Material material : Material.values()) {
+						list.add(material.name());
+					}
+				}
+			}
 		}
 
 		return TabCompletionHelper.getPossibleCompletionsForGivenArgs(args, list.toArray(new String[list.size()]));
