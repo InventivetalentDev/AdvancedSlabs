@@ -39,10 +39,7 @@ import org.inventivetalent.advancedslabs.item.ItemManager;
 import org.inventivetalent.advancedslabs.slab.AdvancedSlab;
 import org.inventivetalent.glow.GlowAPI;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class CommandHandler implements CommandExecutor, TabCompleter {
 
@@ -112,6 +109,18 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String s, String[] args) {
-		return null;
+		List<String> list = new ArrayList<>();
+
+		if (sender.hasPermission("advancedslabs.wand")) {
+			list.add("wand");
+		}
+		if (sender.hasPermission("advancedslabs.highlight")) {
+			list.add("highlight");
+		}
+		if (sender.hasPermission("advancedslabs.reload")) {
+			list.add("reload");
+		}
+
+		return TabCompletionHelper.getPossibleCompletionsForGivenArgs(args, list.toArray(new String[list.size()]));
 	}
 }
