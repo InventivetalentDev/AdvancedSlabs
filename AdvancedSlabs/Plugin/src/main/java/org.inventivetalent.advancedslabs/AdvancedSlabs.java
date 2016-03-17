@@ -147,6 +147,10 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 		}
 	}
 
+	public void reload() {
+		reloadConfig();
+	}
+
 	@Override
 	public void onDisable() {
 		getLogger().info("Saving data...");

@@ -63,6 +63,9 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 			if (sender.hasPermission("advancedslabs.highlight")) {
 				sender.sendMessage("§a/aslab hightlight");
 			}
+			if (sender.hasPermission("advancedslabs.reload")) {
+				sender.sendMessage("§a/aslab reload");
+			}
 			return true;
 		}
 		if ("wand".equalsIgnoreCase(args[0])) {
@@ -70,6 +73,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 				if (sender instanceof Player) {
 					((Player) sender).getInventory().addItem(ItemManager.editorWand.getItem());
 				}
+				return true;
 			}
 		}
 		if ("highlight".equalsIgnoreCase(args[0])) {
@@ -91,7 +95,15 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 					} else {
 						highlightedPlayers.add(((Player) sender).getUniqueId());
 					}
+					return true;
 				}
+			}
+		}
+		if ("reload".equalsIgnoreCase(args[0])) {
+			if (sender.hasPermission("advancedslabs.reload")) {
+				AdvancedSlabs.instance.reload();
+				sender.sendMessage("§aReloaded.");
+				return true;
 			}
 		}
 
