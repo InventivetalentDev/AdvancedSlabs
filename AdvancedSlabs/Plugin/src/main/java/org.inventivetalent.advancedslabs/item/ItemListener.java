@@ -74,7 +74,6 @@ public class ItemListener implements Listener {
 		}
 	}
 
-
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void on(BlockPlaceEvent event) {
 		for (AdvancedSlabItem item : ItemManager.ITEMS) {
