@@ -58,6 +58,7 @@ import org.inventivetalent.glow.GlowAPI;
 import org.inventivetalent.messagebuilder.MessageBuilder;
 import org.inventivetalent.messagebuilder.MessageContainer;
 import org.inventivetalent.packetlistener.PacketListenerAPI;
+import org.mcstats.MetricsLite;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -136,6 +137,14 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 				loadSlabs();
 			}
 		}, 40);
+
+		try {
+			MetricsLite metrics = new MetricsLite(this);
+			if (metrics.start()) {
+				getLogger().info("Metrics started.");
+			}
+		} catch (Exception e) {
+		}
 	}
 
 	@Override
