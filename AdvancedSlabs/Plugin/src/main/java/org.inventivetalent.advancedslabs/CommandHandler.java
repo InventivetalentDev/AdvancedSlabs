@@ -74,7 +74,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 			}
 		}
 		if ("highlight".equalsIgnoreCase(args[0])) {
-			if (sender.hasPermission("advancedslabs.hightlight")) {
+			if (sender.hasPermission("advancedslabs.highlight")) {
 				if (sender instanceof Player) {
 					for (Entity entity : ((Player) sender).getNearbyEntities(16, 16, 16)) {
 						AdvancedSlab slab = plugin.slabManager.getSlabForEntity(entity);
