@@ -127,6 +127,8 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 				.withMessage("editor.error.solidBlock", "&eSorry, you cannot place this block above a solid block")//
 				.withMessage("editor.scrollSteps", "§eSteps: &7%s")//
 				.withMessage("editor.locationInfo", "§ex: §7%x§e, y: §7%s§e, z: §7%s")//
+				.withMessage("highlight", "§aHighlighted nearby slabs")//
+				.withMessage("respawn", "§aRespawned nearby slab entities")//
 				;
 		this.messages = messageBuilder.fromConfig(getConfig().getConfigurationSection("messages")).build();
 

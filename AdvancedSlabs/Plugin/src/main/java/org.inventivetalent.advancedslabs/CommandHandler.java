@@ -91,8 +91,22 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 						highlightedPlayers.remove(((Player) sender).getUniqueId());
 					} else {
 						highlightedPlayers.add(((Player) sender).getUniqueId());
+						sender.sendMessage(plugin.messages.getMessage("highlight"));
 					}
 					return true;
+				}
+			}
+		}
+		if ("respawn".equalsIgnoreCase(args[0])) {
+			if (sender.hasPermission("advancedslabs.respawn")) {
+				if (sender instanceof Player) {
+					for (Entity entity : ((Player) sender).getNearbyEntities(16, 16, 16)) {
+						AdvancedSlab slab = plugin.slabManager.getSlabForEntity(entity);
+						if (slab != null) {
+							slab.respawnFallingBlock();
+						}
+					}
+					sender.sendMessage(plugin.messages.getMessage("respawn"));
 				}
 			}
 		}
