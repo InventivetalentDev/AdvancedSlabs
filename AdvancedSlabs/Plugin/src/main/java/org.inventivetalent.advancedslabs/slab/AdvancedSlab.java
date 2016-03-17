@@ -117,6 +117,7 @@ public class AdvancedSlab {
 
 	public void setMaterial(Material material, byte data) {
 		if (getFallingBlock() != null) {
+			getFallingBlock().allowDeath();
 			getFallingBlock().remove();
 		}
 
