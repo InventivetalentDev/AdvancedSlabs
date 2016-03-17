@@ -185,6 +185,7 @@ public class AdvancedSlab {
 		this.armorStand.setPassenger(null);
 
 		if (this.fallingBlock != null) {
+			this.fallingBlock.allowDeath();
 			this.fallingBlock.stopRiding();
 		}
 		EntityHelper.stopRiding(getShulker());
