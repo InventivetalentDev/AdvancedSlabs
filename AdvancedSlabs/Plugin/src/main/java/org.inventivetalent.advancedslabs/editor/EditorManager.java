@@ -197,6 +197,7 @@ public class EditorManager {
 				case CACTUS:
 				case LEAVES:
 				case LEAVES_2:
+				case SLIME_BLOCK:
 					glowColor = GlowAPI.Color.GREEN;
 					break;
 				case PRISMARINE:
