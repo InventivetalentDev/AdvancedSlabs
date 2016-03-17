@@ -28,16 +28,21 @@
 
 package org.inventivetalent.advancedslabs;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.inventivetalent.advancedslabs.editor.EditorManager;
 import org.inventivetalent.advancedslabs.item.ItemManager;
 import org.inventivetalent.advancedslabs.slab.AdvancedSlab;
 import org.inventivetalent.glow.GlowAPI;
+import org.inventivetalent.itembuilder.ItemBuilder;
 
 import java.util.*;
 
@@ -62,6 +67,9 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 			}
 			if (sender.hasPermission("advancedslabs.reload")) {
 				sender.sendMessage("§a/aslab reload");
+			}
+			if (sender.hasPermission("advancedslabs.give")) {
+				sender.sendMessage("§a/aslab give <Material>[:Data] [Player]");
 			}
 			return true;
 		}
@@ -117,6 +125,63 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 				return true;
 			}
 		}
+		if ("give".equalsIgnoreCase(args[0])) {
+			if (sender.hasPermission("advancedslabs.give")) {
+				if (args.length == 1) {
+					sender.sendMessage("§a/aslab give <Material>[:Data] [Player]");
+					return false;
+				}
+				String materialString = args[1];
+				String dataString = "0";
+				if (materialString.contains(":")) {
+					String[] split = materialString.split(":");
+					materialString = split[0];
+					dataString = split[1];
+				}
+				Material material = null;
+				byte data = 0;
+				try {
+					try {
+						material = Material.getMaterial(Integer.parseInt(materialString));
+					} catch (NumberFormatException e) {
+						material = Material.valueOf(materialString.toUpperCase());
+					}
+				} catch (Exception e) {
+				}
+				if (material == null) {
+					sender.sendMessage(plugin.messages.getMessage("invalidMaterial", materialString));
+					return false;
+				}
+				try {
+					data = Byte.parseByte(dataString);
+				} catch (NumberFormatException e) {
+				}
+
+				Player target;
+				if (args.length > 2) {
+					target = Bukkit.getPlayer(args[2]);
+					if (target == null || !target.isOnline()) {
+						sender.sendMessage(plugin.messages.getMessage("error.notOnline"));
+						return false;
+					}
+				} else {
+					if (!(sender instanceof Player)) {
+						sender.sendMessage("§cPlease specify the player");
+						return false;
+					}
+					target = (Player) sender;
+				}
+
+				ItemStack slabBlock = new ItemStack(material, 1, data);
+				ItemMeta meta = slabBlock.getItemMeta();
+				meta.setDisplayName(AdvancedSlabs.instance.messages.getMessage("blockPrefix") + material.name() + (data > 0 ? ":" + data : ""));
+				slabBlock.setItemMeta(meta);
+				slabBlock = new ItemBuilder(slabBlock).buildMeta().glow().item().build();
+
+				target.getWorld().dropItemNaturally(target.getLocation(), slabBlock).setPickupDelay(0);
+				return true;
+			}
+		}
 
 		return false;
 	}
@@ -133,6 +198,9 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 		}
 		if (sender.hasPermission("advancedslabs.reload")) {
 			list.add("reload");
+		}
+		if (sender.hasPermission("advancedslabs.give")) {
+			list.add("give");
 		}
 
 		return TabCompletionHelper.getPossibleCompletionsForGivenArgs(args, list.toArray(new String[list.size()]));

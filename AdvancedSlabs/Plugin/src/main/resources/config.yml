@@ -35,5 +35,10 @@ messages:
     error:
       solidBlock: "&eSorry, you cannot place this block above a solid block."
       noPermission: "&cYou cannot edit this block."
+  error:
+    invalidMaterial: "&cInvalid Material: %s"
+    notOnline: "&cPlayer %s is not online"
+  highlight: "&aHighlighted nearby slabs"
+  respawn: "&aRespawned nearby slab entities"
   # Prefix for block items (e.g. &bAdvancedSlab: &eSTONE)
   blockPrefix: "&bAdvancedSlab: &e"
