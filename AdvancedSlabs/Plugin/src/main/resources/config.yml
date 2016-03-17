@@ -4,6 +4,10 @@ slabRatio: 1
 # Enable owners of slabs (only owners or players with permission "advancedslabs.editall" can edit the slab)
 slabOwners: true
 
+# Make sure the slab is solid by placing barriers and flower pots inside it (prevents players from being kicked for flying)
+# Alternatively you can enable "allow-flight" in server.properties
+ensureSolid: false
+
 items:
   editor:
     wand:

@@ -29,6 +29,7 @@
 package org.inventivetalent.advancedslabs.item;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.CraftItemEvent;
@@ -81,9 +82,33 @@ public class EditorWand extends AdvancedSlabItem {
 		//Ignore the item when editing
 		if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
 			if (AdvancedSlabs.instance.editorManager.isEditing(event.getPlayer().getUniqueId())) {
+				AdvancedSlab slab = AdvancedSlabs.instance.editorManager.getEditor(event.getPlayer().getUniqueId()).slab;
+
 				AdvancedSlabs.instance.editorManager.removeEditor(event.getPlayer().getUniqueId());
 				event.getPlayer().sendMessage(AdvancedSlabs.instance.messages.getMessage("editor.finished"));
 				event.setCancelled(true);
+
+				if (AdvancedSlabs.instance.getConfig().getBoolean("ensureSolid")) {
+					//Place a barrier block
+					Location location = slab.getLocation().clone();
+					double partial = location.getY() - ((int) location.getY());
+					if (partial >= 0.5) {
+						//Below
+						if (location.getBlock().getType() == Material.AIR) {
+							location.getBlock().setType(Material.BARRIER);
+						}
+						if (partial > 0.5625) {
+							//Also place a slab
+							location.clone().add(0, 0.5, 0).getBlock().setType(Material.FLOWER_POT);
+						}
+					} else {
+						//Same height
+						location = location.add(0, 0.015625, 0);
+						if (location.getBlock().getType() == Material.AIR) {
+							location.getBlock().setType(Material.BARRIER);
+						}
+					}
+				}
 				return;
 			}
 		}
@@ -138,6 +163,7 @@ public class EditorWand extends AdvancedSlabItem {
 					}
 				}, 2);
 			} else {
+				System.out.println(slab.getLocation());
 				AdvancedSlabs.instance.editorManager.newEditor(event.getPlayer().getUniqueId(), slab);
 				event.getPlayer().sendMessage(AdvancedSlabs.instance.messages.getMessage("editor.editing"));
 			}
