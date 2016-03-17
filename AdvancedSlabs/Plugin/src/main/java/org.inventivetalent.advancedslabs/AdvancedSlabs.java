@@ -225,8 +225,6 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void on(CreatureSpawnEvent event) {
-		System.out.println(event);
-		System.out.println(event.isCancelled());
 	}
 
 	public Team getCollisionTeam() {
