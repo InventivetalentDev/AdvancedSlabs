@@ -94,6 +94,12 @@
                                     <include>org.inventivetalent.advancedslabs:**</include>
                                 </includes>
                             </artifactSet>
+                            <relocations>
+                                <relocation>
+                                    <pattern>org.mcstats</pattern>
+                                    <shadedPattern>org.inventivetalent.advancedslabs.mcstats</shadedPattern>
+                                </relocation>
+                            </relocations>
                         </configuration>
                     </execution>
                 </executions>
