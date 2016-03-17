@@ -80,8 +80,8 @@ public class EditorManager {
 		Material type = slab.getMaterialData().getItemType();
 		boolean colorable = type == Material.STAINED_GLASS_PANE || type == Material.STAINED_GLASS || type == Material.STAINED_CLAY || type == Material.WOOL;
 
+		GlowAPI.Color glowColor = null;
 		if (colorable) {
-			GlowAPI.Color glowColor = GlowAPI.Color.WHITE;
 			switch (DyeColor.getByData(slab.getMaterialData().getData())) {
 				case WHITE:
 					glowColor = GlowAPI.Color.WHITE;
@@ -132,6 +132,102 @@ public class EditorManager {
 					glowColor = GlowAPI.Color.BLUE;
 					break;
 			}
+		} else {
+			switch (type) {
+				case STONE:
+				case COBBLESTONE:
+				case COBBLESTONE_STAIRS:
+				case MOSSY_COBBLESTONE:
+				case COBBLE_WALL:
+					glowColor = GlowAPI.Color.GRAY;
+					break;
+				case FURNACE:
+				case DROPPER:
+				case DISPENSER:
+				case PISTON_BASE:
+				case PISTON_EXTENSION:
+				case PISTON_STICKY_BASE:
+				case PISTON_MOVING_PIECE:
+					glowColor = GlowAPI.Color.DARK_GRAY;
+					break;
+				case SPONGE:
+				case SAND:
+				case SANDSTONE:
+				case SANDSTONE_STAIRS:
+				case GLOWSTONE:
+				case HAY_BLOCK:
+				case END_BRICKS:
+				case ENDER_STONE:
+				case REDSTONE_LAMP_ON:
+					glowColor = GlowAPI.Color.YELLOW;
+					break;
+				case RED_SANDSTONE:
+				case RED_SANDSTONE_STAIRS:
+				case PUMPKIN:
+				case JACK_O_LANTERN:
+					glowColor = GlowAPI.Color.GOLD;
+					break;
+				case BRICK:
+				case BRICK_STAIRS:
+				case CLAY_BRICK:
+				case REDSTONE_ORE:
+				case REDSTONE_BLOCK:
+					glowColor = GlowAPI.Color.RED;
+					break;
+				case DIRT:
+				case LOG:
+				case LOG_2:
+				case WOOD:
+				case SOUL_SAND:
+				case CHEST:
+				case TRAPPED_CHEST:
+				case JUKEBOX:
+				case NOTE_BLOCK:
+				case WORKBENCH:
+				case REDSTONE_LAMP_OFF:
+					glowColor = GlowAPI.Color.DARK_RED;
+					break;
+				case LAPIS_BLOCK:
+				case LAPIS_ORE:
+					glowColor = GlowAPI.Color.BLUE;
+					break;
+				case MELON:
+				case EMERALD_BLOCK:
+				case EMERALD_ORE:
+				case CACTUS:
+				case LEAVES:
+				case LEAVES_2:
+					glowColor = GlowAPI.Color.GREEN;
+					break;
+				case PRISMARINE:
+				case SEA_LANTERN:
+				case ICE:
+				case FROSTED_ICE:
+				case PACKED_ICE:
+				case DIAMOND_ORE:
+				case DIAMOND_BLOCK:
+					glowColor = GlowAPI.Color.AQUA;
+					break;
+				case PURPUR_BLOCK:
+				case PURPUR_DOUBLE_SLAB:
+				case PURPUR_PILLAR:
+				case PURPUR_SLAB:
+				case PURPUR_STAIRS:
+					glowColor = GlowAPI.Color.PURPLE;
+					break;
+				case OBSIDIAN:
+				case NETHER_BRICK:
+				case NETHER_BRICK_STAIRS:
+				case NETHER_FENCE:
+				case ENDER_CHEST:
+					glowColor = GlowAPI.Color.BLACK;
+					break;
+
+				default:
+					break;
+			}
+		}
+		if (glowColor != null) {
 			GlowAPI.setGlowing(slab.getShulker(), glowColor, receiver);
 		} else {
 			GlowAPI.setGlowing(slab.getShulker(), true, receiver);
