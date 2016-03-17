@@ -56,6 +56,7 @@ public class PacketListener {
 							Bukkit.getScheduler().runTask(getPlugin(), new Runnable() {
 								@Override
 								public void run() {
+									slab.refreshEntities();
 									slab.respawnFallingBlock();
 								}
 							});

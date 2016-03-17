@@ -111,6 +111,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 					for (Entity entity : ((Player) sender).getNearbyEntities(16, 16, 16)) {
 						AdvancedSlab slab = plugin.slabManager.getSlabForEntity(entity);
 						if (slab != null) {
+							slab.refreshEntities();
 							slab.respawnFallingBlock();
 						}
 					}
