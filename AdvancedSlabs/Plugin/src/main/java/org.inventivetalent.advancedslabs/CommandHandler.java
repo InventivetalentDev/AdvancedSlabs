@@ -177,7 +177,10 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 				ItemMeta meta = slabBlock.getItemMeta();
 				meta.setDisplayName(AdvancedSlabs.instance.messages.getMessage("blockPrefix") + material.name() + (data > 0 ? ":" + data : ""));
 				slabBlock.setItemMeta(meta);
-				slabBlock = new ItemBuilder(slabBlock).buildMeta().glow().item().build();
+				try {
+					slabBlock = new ItemBuilder(slabBlock).buildMeta().glow().item().build();
+				} catch (Exception e) {
+				}
 
 				target.getWorld().dropItemNaturally(target.getLocation(), slabBlock).setPickupDelay(0);
 				return true;
@@ -191,7 +194,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 	public List<String> onTabComplete(CommandSender sender, Command command, String s, String[] args) {
 		List<String> list = new ArrayList<>();
 
-		if(args.length<=1) {
+		if (args.length <= 1) {
 			if (sender.hasPermission("advancedslabs.wand")) {
 				list.add("wand");
 			}
@@ -204,7 +207,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 			if (sender.hasPermission("advancedslabs.give")) {
 				list.add("give");
 			}
-		}else{
+		} else {
 			if ("give".equalsIgnoreCase(args[0])) {
 				if (sender.hasPermission("advancedslabs.give")) {
 					for (Material material : Material.values()) {

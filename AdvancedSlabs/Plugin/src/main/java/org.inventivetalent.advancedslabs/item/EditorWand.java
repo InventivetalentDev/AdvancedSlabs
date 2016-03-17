@@ -127,7 +127,10 @@ public class EditorWand extends AdvancedSlabItem {
 				ItemMeta meta = slabBlock.getItemMeta();
 				meta.setDisplayName(AdvancedSlabs.instance.messages.getMessage("blockPrefix") + blockType.name() + (blockData > 0 ? ":" + blockData : ""));
 				slabBlock.setItemMeta(meta);
-				slabBlock = new ItemBuilder(slabBlock).buildMeta().glow().item().build();
+				try {
+					slabBlock = new ItemBuilder(slabBlock).buildMeta().glow().item().build();
+				} catch (Exception e) {
+				}
 
 				for (int i = 0; i < AdvancedSlabs.instance.getConfig().getInt("slabRatio"); i++) {
 					event.getClickedBlock().getWorld().dropItemNaturally(event.getClickedBlock().getLocation().add(.5, .5, .5), slabBlock).setPickupDelay(0);
