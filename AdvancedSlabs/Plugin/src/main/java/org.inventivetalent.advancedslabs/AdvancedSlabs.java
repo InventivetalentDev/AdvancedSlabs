@@ -203,22 +203,6 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 
 	@EventHandler
 	public void onChunkLoad(ChunkLoadEvent event) {
-		for (final AdvancedSlab slab : slabManager.slabs) {
-			if (slab.getLocation().getChunk().equals(event.getChunk())) {
-				Bukkit.getScheduler().runTaskLater(this, new Runnable() {
-					@Override
-					public void run() {
-						slab.refreshEntities();
-					}
-				}, 5);
-				Bukkit.getScheduler().runTaskLater(this, new Runnable() {
-					@Override
-					public void run() {
-						slab.respawnFallingBlock();
-					}
-				}, 10);
-			}
-		}
 	}
 
 	@EventHandler
