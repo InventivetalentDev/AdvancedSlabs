@@ -144,7 +144,7 @@ public class PathWand extends AdvancedSlabItem {
 		if (slab != null) {
 			if (AdvancedSlabs.instance.pathEditorManager.isEditing(((Player) event.getDamager()).getUniqueId())) {
 				PathEditor pathEditor = AdvancedSlabs.instance.pathEditorManager.getEditor(((Player) event.getDamager()).getUniqueId());
-				slab.path = pathEditor.path.id;
+				slab.path = -1;
 				((Player) event.getDamager()).sendMessage(AdvancedSlabs.instance.messages.getMessage("editor.path.unbound"));
 				event.setCancelled(true);
 			}
