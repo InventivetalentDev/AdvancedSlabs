@@ -79,8 +79,8 @@ public class PathParticleTask extends BukkitRunnable {
 					double zDiff = editor.path.getPoint(i + 1).getZ() - point.getZ();
 					Vector direction = new Vector(xDiff, yDiff, zDiff);
 					for (double d = 0; d < 1; d += 0.1) {
-						Location location = direction.clone().multiply(d).add(new Vector(point.getX(), point.getY(), point.getZ())).toLocation(editor.getPlayer().getWorld());
-						ParticleEffect.REDSTONE.sendColor(Collections.singleton(editor.getPlayer()), location.getX(), location.getY(), location.getZ(), Color.YELLOW);
+						Location location = direction.clone().multiply(d).add(new Vector(point.getX(), point.getY() + .5, point.getZ())).toLocation(editor.getPlayer().getWorld());
+						ParticleEffect.REDSTONE.sendColor(Collections.singleton(editor.getPlayer()), location.getX(), location.getY() + .5, location.getZ(), Color.YELLOW);
 					}
 				}
 			}
