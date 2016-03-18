@@ -41,7 +41,6 @@ public abstract class MovementControllerAbstract {
 
 	public final SlabPath path;
 	public boolean moving        = false;
-	public int     pointIndex    = 0;
 	public double  blocksPerTick = 0.0625D;
 
 	public MovementControllerAbstract(SlabPath path) {
