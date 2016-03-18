@@ -39,7 +39,7 @@ import java.util.UUID;
 public class PathEditor {
 
 	public static final double MIN_SPEED = 0.001953125D;
-	public static final double MAX_SPEED = 10;//TODO: customizable
+	public static final double MAX_SPEED = 10;
 
 	public UUID     player;
 	public SlabPath path;
