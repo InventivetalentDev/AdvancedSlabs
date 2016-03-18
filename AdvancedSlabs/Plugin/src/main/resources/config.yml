@@ -17,6 +17,7 @@ items:
         lore:
         - "&8Right-Click &7to edit!"
         - "&8Shift right-click &7to remove"
+        - "&8Left-Click &7to stop editing"
   movement:
     path:
       wand:
