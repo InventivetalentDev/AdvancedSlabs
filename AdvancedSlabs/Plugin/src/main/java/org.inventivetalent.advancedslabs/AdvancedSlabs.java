@@ -258,6 +258,7 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 	@EventHandler
 	public void onQuit(PlayerQuitEvent event) {
 		editorManager.removeEditor(event.getPlayer().getUniqueId());
+		pathEditorManager.removeEditor(event.getPlayer().getUniqueId());
 	}
 
 	@EventHandler
