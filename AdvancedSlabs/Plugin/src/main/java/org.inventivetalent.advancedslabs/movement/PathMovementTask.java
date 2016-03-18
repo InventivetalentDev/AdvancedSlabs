@@ -28,6 +28,7 @@
 
 package org.inventivetalent.advancedslabs.movement;
 
+import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.inventivetalent.advancedslabs.AdvancedSlabs;
 import org.inventivetalent.advancedslabs.movement.path.SlabPath;
@@ -43,6 +44,7 @@ public class PathMovementTask extends BukkitRunnable {
 
 	@Override
 	public void run() {
+		if (Bukkit.getOnlinePlayers().isEmpty()) { return; }
 		for (AdvancedSlab slab : plugin.slabManager.slabs) {
 			if (slab.path == -1) { continue; }
 			SlabPath path = plugin.pathManager.getPathById(slab.path);
