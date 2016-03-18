@@ -155,7 +155,7 @@ public enum PathType {
 						goToNext();
 					}
 					Vector direction = getDirection();
-					getSlab().moveRelative(direction.clone().multiply(0.0625/*TODO*/));
+					getSlab().moveRelative(direction.clone().multiply(blocksPerTick));
 				}
 			};
 		}
