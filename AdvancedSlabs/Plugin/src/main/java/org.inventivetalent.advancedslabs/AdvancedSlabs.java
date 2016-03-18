@@ -46,7 +46,6 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Team;
 import org.inventivetalent.advancedslabs.editor.BlockEditor;
@@ -267,34 +266,19 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 	}
 
 	@EventHandler
-	public void onChunkLoad(ChunkLoadEvent event) {
-	}
-
-	@EventHandler
 	public void on(EntityChangeBlockEvent event) {
 		if (event.getEntity().getCustomName() != null && event.getEntity().getCustomName().equals("advancedslab")) {
 			((FallingBlock) event.getEntity()).setTicksLived(1);
 			event.setCancelled(true);
-
-//			AdvancedSlab slab = slabManager.getSlabForEntity(event.getEntity());
-//			if (slab != null) {
-//				if (editorManager.getEditorForSlab(slab) == null) {
-//					slabManager.removeSlab(slab);
-//					slabManager.createSlab(slab.getLocation(), slab.getMaterialData().getItemType(), slab.getMaterialData().getData());
-//				}
-//			}
 		}
 	}
 
 	@EventHandler
 	public void on(EntityDeathEvent event) {
-		System.out.println(event);
-		System.out.println(event.getEntity());
 		AdvancedSlab slab = slabManager.getSlabForEntity(event.getEntity());
 		if (slab != null) {
 			if (slab.despawned) {
 				slabManager.removeSlab(slab);
-			} else {
 			}
 		}
 	}
