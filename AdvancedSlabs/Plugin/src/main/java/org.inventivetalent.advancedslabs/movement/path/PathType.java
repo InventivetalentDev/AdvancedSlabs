@@ -143,7 +143,7 @@ public enum PathType {
 					} else if (pointIndex == 0) {//We're at the start
 						return 1;
 					}
-					return -1;
+					return direction;
 				}
 
 				@Override
