@@ -81,11 +81,13 @@ messages:
       type:
         format: "&6%s &8- &7%s"
         circular:
-          toggle:
-            description: "Go directly to the start when at the end. Repeat until toggled off"
+          switch:
+            description: "Go directly to the start when at the end. Repeat while power is supplied"
         reverse:
+          switch:
+            description: "Move the path in reversed order when at the end. Repeat while power is supplied"
           toggle:
-            description: "Move the path in reversed order when at the end. Repeat until toggled off"
+            description: "Move to the end when toggled by power. Move back to the start when toggled again"
       speed:
         format: "&aPath speed: &7%s (blocks per tick)"
       error:

@@ -32,6 +32,7 @@ import org.inventivetalent.advancedslabs.AdvancedSlabs;
 import org.inventivetalent.advancedslabs.movement.MovementControllerAbstract;
 import org.inventivetalent.advancedslabs.movement.path.types.CircularSwitchController;
 import org.inventivetalent.advancedslabs.movement.path.types.ReverseSwitchController;
+import org.inventivetalent.advancedslabs.movement.path.types.ReverseToggleController;
 
 public enum PathType {
 
@@ -45,6 +46,12 @@ public enum PathType {
 		@Override
 		public MovementControllerAbstract newController(SlabPath path) {
 			return new ReverseSwitchController(path);
+		}
+	},
+	REVERSE_TOGGLE("editor.path.type.reverse.toggle") {
+		@Override
+		public MovementControllerAbstract newController(SlabPath path) {
+			return new ReverseToggleController(path);
 		}
 	};
 

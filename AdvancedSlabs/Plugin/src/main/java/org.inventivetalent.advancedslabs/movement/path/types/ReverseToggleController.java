@@ -26,71 +26,46 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.advancedslabs.movement;
+package org.inventivetalent.advancedslabs.movement.path.types;
 
-import org.bukkit.util.Vector;
-import org.inventivetalent.advancedslabs.AdvancedSlabs;
-import org.inventivetalent.advancedslabs.movement.path.PathPassenger;
-import org.inventivetalent.advancedslabs.movement.path.PathPoint;
 import org.inventivetalent.advancedslabs.movement.path.SlabPath;
 import org.inventivetalent.advancedslabs.slab.AdvancedSlab;
 
-import java.util.Set;
+public class ReverseToggleController extends ReverseSwitchController {
 
-public abstract class MovementControllerAbstract {
+	public boolean wasActive = false;
+	public boolean toggled   = false;
 
-	public final SlabPath path;
-	public boolean active        = false;
-	public double  blocksPerTick = 0.0625D;
-
-	public MovementControllerAbstract(SlabPath path) {
-		this.path = path;
+	public ReverseToggleController(SlabPath path) {
+		super(path);
 	}
 
+	@Override
 	public void setActive(boolean active) {
-		this.active = active;
-	}
-
-	@Deprecated
-	public AdvancedSlab getSlab() {
-		return AdvancedSlabs.instance.slabManager.getFirstSlabForPath(this.path);
-	}
-
-	public Set<AdvancedSlab> getSlabs() {
-		return AdvancedSlabs.instance.slabManager.getSlabsForPath(this.path);
-	}
-
-	public abstract PathPoint getNext(PathPassenger pathPassenger);
-
-	public abstract PathPoint goToNext(PathPassenger pathPassenger);
-
-	public abstract PathPoint getPrevious(PathPassenger pathPassenger);
-
-	public abstract PathPoint goToPrevious(PathPassenger pathPassenger);
-
-	public PathPoint getCurrent(PathPassenger pathPassenger) {
-		return this.path.getPoint(pathPassenger.getPointIndex());
-	}
-
-	public Vector getDirection(AdvancedSlab slab) {
-		PathPoint next = getNext(slab);
-
-		return new Vector(next.getX() - slab.getLocation().getX(), next.getY() - slab.getLocation().getY(), next.getZ() - slab.getLocation().getZ());
-	}
-
-	public boolean isAtTarget(AdvancedSlab slab) {//target == next block
-		PathPoint next = getNext(slab);
-		double distance = next.getLocation(slab.getLocation().getWorld()).distance(slab.getLocation());
-		return distance < blocksPerTick;
-	}
-
-	public void move() {
-		System.out.println(getSlabs());
-		for (AdvancedSlab slab : getSlabs()) {
-			move(slab);
+		super.setActive(active);
+		if (active) {
+			if (!wasActive) {
+				wasActive = toggled = true;
+			}
+		} else {
+			wasActive = false;
 		}
 	}
 
-	public abstract void move(AdvancedSlab slab);
+	@Override
+	public void move() {
+		if (!toggled) {
+			return;
+		}
+		active = true;
+		super.move();
+	}
+
+	@Override
+	public boolean isAtTarget(AdvancedSlab slab) {
+		boolean atTarget = super.isAtTarget(slab);
+		if (atTarget) { toggled = false; }
+		return atTarget;
+	}
 
 }

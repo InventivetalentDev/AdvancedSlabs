@@ -49,7 +49,9 @@ public class PathMovementTask extends BukkitRunnable {
 			if (slab.path == -1) { continue; }
 			SlabPath path = plugin.pathManager.getPathById(slab.path);
 			if (path != null) {
-				if (path.isActive()) { path.tick(); }
+				//				if (path.isActive()) {
+				path.tick();
+				//			}
 			}
 		}
 	}

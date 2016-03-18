@@ -48,7 +48,7 @@ public class SlabPath {
 	public final int    id;
 	public final String world;
 	public final List<PathPoint> points = new ArrayList<>();
-	public       PathType        type   = PathType.CIRCULAR_TOGGLE;//Default
+	public       PathType        type   = PathType.CIRCULAR_SWITCH;//Default
 
 	public double speed = 0.0625;//Blocks per tick
 	public MovementControllerAbstract movementController;
@@ -72,12 +72,13 @@ public class SlabPath {
 			points.add(new PathPoint(iterator.next().getAsJsonObject()));
 		}
 		type = PathType.valueOf(jsonObject.get("type").getAsString());
-		speed = jsonObject.get("speed").getAsInt();
+		speed = jsonObject.get("speed").getAsDouble();
 		movementController = type.newController(this);
 	}
 
 	public void tick() {
-		if (this.movementController == null || !this.movementController.moving) { return; }
+		if (this.movementController == null /*|| !this.movementController.active*/) { return; }
+		checkActive();
 		this.movementController.blocksPerTick = this.speed;
 		this.movementController.move();
 	}
@@ -120,7 +121,7 @@ public class SlabPath {
 		return null;
 	}
 
-	public boolean isActive() {
+	public boolean checkActive() {
 		PathPoint start = getStart();
 		if (start == null) { return false; }
 		Block startBlock = start.getLocation(getWorld()).getBlock();
@@ -136,10 +137,13 @@ public class SlabPath {
 			Block relative = startBlock.getRelative(face);
 			if (relative.isBlockIndirectlyPowered() || relative.isBlockPowered()) {
 				if (this.movementController != null) {
-					this.movementController.moving = true;
+					this.movementController.setActive(true);
 				}
 				return true;
 			}
+		}
+		if (this.movementController != null) {
+			this.movementController.setActive(false);
 		}
 		return false;
 	}
