@@ -28,156 +28,23 @@
 
 package org.inventivetalent.advancedslabs.movement.path;
 
-import org.bukkit.util.Vector;
 import org.inventivetalent.advancedslabs.AdvancedSlabs;
 import org.inventivetalent.advancedslabs.movement.MovementControllerAbstract;
-import org.inventivetalent.advancedslabs.slab.AdvancedSlab;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.inventivetalent.advancedslabs.movement.path.types.CircularSwitchController;
+import org.inventivetalent.advancedslabs.movement.path.types.ReverseSwitchController;
 
 public enum PathType {
 
-	CIRCULAR_TOGGLE("editor.path.type.circular.toggle.description") {
+	CIRCULAR_SWITCH("editor.path.type.circular.switch.description") {
 		@Override
 		public MovementControllerAbstract newController(SlabPath path) {
-			return new MovementControllerAbstract(path) {
-
-				@Override
-				public PathPoint getNext(PathPassenger pathPassenger) {
-					if (pathPassenger.getPointIndex() < path.length() - 1) {
-						return path.getPoint(pathPassenger.getPointIndex() + 1);
-					} else {
-						return path.getPoint(0);
-					}
-				}
-
-				@Override
-				public PathPoint goToNext(PathPassenger pathPassenger) {
-					if (pathPassenger.getPointIndex() < path.length() - 1) {
-						pathPassenger.setPointIndex(pathPassenger.getPointIndex() + 1);
-						return path.getPoint(pathPassenger.getPointIndex());
-					} else {
-						pathPassenger.setPointIndex(0);
-						return path.getPoint(pathPassenger.getPointIndex());
-					}
-				}
-
-				@Override
-				public PathPoint getPrevious(PathPassenger pathPassenger) {
-					if (pathPassenger.getPointIndex() > 0) {
-						return path.getPoint(pathPassenger.getPointIndex() - 1);
-					} else {
-						return path.getPoint(path.length() - 1);
-					}
-				}
-
-				@Override
-				public PathPoint goToPrevious(PathPassenger pathPassenger) {
-					if (pathPassenger.getPointIndex() > 0) {
-						pathPassenger.setPointIndex(pathPassenger.getPointIndex() - 1);
-						return path.getPoint(pathPassenger.getPointIndex());
-					} else {
-						pathPassenger.setPointIndex(path.length() - 1);
-						return path.getPoint(pathPassenger.getPointIndex());
-					}
-				}
-
-				@Override
-				public void move(AdvancedSlab slab) {
-					if (isAtTarget(slab)) {
-						goToNext(slab);
-					}
-					Vector direction = getDirection(slab);
-					Vector vector = direction.clone().normalize().multiply(blocksPerTick);
-					slab.moveRelative(vector);
-				}
-			};
+			return new CircularSwitchController(path);
 		}
 	},
-	REVERSE_TOGGLE("editor.path.type.reverse.toggle.description") {
+	REVERSE_SWITCH("editor.path.type.reverse.switch.description") {
 		@Override
 		public MovementControllerAbstract newController(SlabPath path) {
-			return new MovementControllerAbstract(path) {
-				//				int direction = 1;//1 = forward, 0 = backward
-				Map<PathPassenger, Integer> directionMap = new HashMap<>();
-
-				@Override
-				public PathPoint getNext(PathPassenger pathPassenger) {
-					int direction = getUpdatedDirection(pathPassenger);
-					if (direction == 1) {
-						return path.getPoint(pathPassenger.getPointIndex() + 1);
-					} else {
-						return path.getPoint(pathPassenger.getPointIndex() - 1);
-					}
-				}
-
-				@Override
-				public PathPoint goToNext(PathPassenger pathPassenger) {
-					updateDirection(pathPassenger);
-					if (getDirection(pathPassenger) == 1) {
-						pathPassenger.setPointIndex(pathPassenger.getPointIndex() + 1);
-						return path.getPoint(pathPassenger.getPointIndex());
-					} else {
-						pathPassenger.setPointIndex(pathPassenger.getPointIndex() - 1);
-						return path.getPoint(pathPassenger.getPointIndex());
-					}
-				}
-
-				@Override
-				public PathPoint getPrevious(PathPassenger pathPassenger) {
-					int direction = getUpdatedDirection(pathPassenger);
-					if (direction == 1) {
-						return path.getPoint(pathPassenger.getPointIndex() - 1);
-					} else {
-						return path.getPoint(pathPassenger.getPointIndex() + 1);
-					}
-				}
-
-				@Override
-				public PathPoint goToPrevious(PathPassenger pathPassenger) {
-					updateDirection(pathPassenger);
-					if (getDirection(pathPassenger) == 1) {
-						pathPassenger.setPointIndex(pathPassenger.getPointIndex() - 1);
-						return path.getPoint(pathPassenger.getPointIndex());
-					} else {
-						pathPassenger.setPointIndex(pathPassenger.getPointIndex() + 1);
-						return path.getPoint(pathPassenger.getPointIndex());
-					}
-				}
-
-				int getDirection(PathPassenger pathPassenger) {
-					if (directionMap.containsKey(pathPassenger)) {
-						return directionMap.get(pathPassenger);
-					}
-					return 1;
-				}
-
-				void updateDirection(PathPassenger pathPassenger) {
-					int direction = getUpdatedDirection(pathPassenger);
-					directionMap.put(pathPassenger, direction);
-//					pathPassenger.setPointIndex(direction);
-				}
-
-				int getUpdatedDirection(PathPassenger pathPassenger) {
-					if (pathPassenger.getPointIndex() == path.length() - 1) {//We're at the end
-						return 0;
-					} else if (pathPassenger.getPointIndex() == 0) {//We're at the start
-						return 1;
-					}
-					return getDirection(pathPassenger);
-				}
-
-				@Override
-				public void move(AdvancedSlab slab) {
-					if (isAtTarget(slab)) {
-						goToNext(slab);
-					}
-					Vector direction = getDirection(slab);
-					Vector vector = direction.clone().normalize().multiply(blocksPerTick);
-					slab.moveRelative(vector);
-				}
-			};
+			return new ReverseSwitchController(path);
 		}
 	};
 
