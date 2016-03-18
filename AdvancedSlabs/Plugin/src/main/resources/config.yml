@@ -67,7 +67,6 @@ messages:
     scrollSteps: "&eSteps: &7%s"
     locationInfo: "&ex: &7%s&e, y: &7%s&e, Z: &7%s"
     error:
-      solidBlock: "&eSorry, you cannot place this block above a solid block."
       noPermission: "&cYou cannot edit this block."
     path:
       reset: "&aYou are no longer editing a path"

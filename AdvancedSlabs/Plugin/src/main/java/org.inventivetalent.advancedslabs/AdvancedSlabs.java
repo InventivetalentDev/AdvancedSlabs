@@ -156,7 +156,6 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 				.withMessage("editor.editing", "§aYou are now editing this block")//
 				.withMessage("editor.finished", "§aYou are no longer editing")//
 				.withMessage("blockPrefix", "§bAdvancedSlab: §e")//
-				.withMessage("editor.error.solidBlock", "&eSorry, you cannot place this block above a solid block")//
 				.withMessage("editor.scrollSteps", "§eSteps: &7%s")//
 				.withMessage("editor.locationInfo", "§ex: §7%x§e, y: §7%s§e, z: §7%s")//
 				.withMessage("highlight", "§aHighlighted nearby slabs")//
