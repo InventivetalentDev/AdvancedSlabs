@@ -61,10 +61,8 @@ public class SlabManager {
 	}
 
 	public void removeSlab(AdvancedSlab slab) {
-		System.out.println(slabs);
 		slabs.remove(slab);
 		slab.despawn();
-		System.out.println(slabs);
 	}
 
 	public AdvancedSlab getSlabForEntity(Entity entity) {

@@ -43,7 +43,6 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -254,10 +253,6 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 				editor.handleDrop(event);
 			}
 		}
-	}
-
-	@EventHandler
-	public void onInteract(PlayerInteractEvent event) {
 	}
 
 	@EventHandler

@@ -150,8 +150,6 @@ public class EditorWand extends AdvancedSlabItem {
 					return;
 				}
 			}
-			System.out.println(event);
-			System.out.println(event.getPlayer().isSneaking());
 			if (event.getPlayer().isSneaking()) {
 				AdvancedSlabs.instance.editorManager.removeEditor(event.getPlayer().getUniqueId());
 				AdvancedSlabs.instance.slabManager.removeSlab(slab);

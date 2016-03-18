@@ -82,10 +82,6 @@ public class AdvancedSlab {
 		this.shulkerUUID = (this.shulker = location.getWorld().spawn(location, Shulker.class)).getUniqueId();
 		AdvancedSlabs.instance.spawningSlab = false;
 
-		System.out.println(this.shulkerUUID);
-		System.out.println(this.shulker);
-		System.out.println(this.shulker.isDead());
-
 		this.armorStand.setGravity(false);
 		this.armorStand.setVisible(false);
 		this.armorStand.setCustomName("advancedslab");
@@ -123,7 +119,6 @@ public class AdvancedSlab {
 		}
 
 		refreshEntities();
-		//		AdvancedSlabs.instance.fallingBlockResetTask.fallingBlocks.add(getFallingBlock());
 	}
 
 	public void setMaterial(Material material, byte data) {
@@ -188,8 +183,6 @@ public class AdvancedSlab {
 	}
 
 	public void move(Location location) {
-		System.out.println("move "+location);
-		System.out.println(despawned);
 		if (despawned) { return; }
 		location.setPitch(0);
 		location.setYaw(0);
@@ -198,7 +191,7 @@ public class AdvancedSlab {
 
 		EntityHelper.setPosition(getArmorStand(), location.getX(), location.getY(), location.getZ());
 
-//		reStackEntities();
+		//		reStackEntities();
 	}
 
 	public void moveRelative(Vector vector) {
@@ -218,7 +211,6 @@ public class AdvancedSlab {
 	}
 
 	public void despawn() {
-		System.out.println("despawn()");
 		despawned = true;
 		if (getFallingBlock() != null) {
 			getFallingBlock().allowDeath();

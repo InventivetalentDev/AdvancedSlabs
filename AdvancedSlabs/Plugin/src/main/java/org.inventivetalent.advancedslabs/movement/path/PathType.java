@@ -78,13 +78,10 @@ public enum PathType {
 				@Override
 				public void move() {
 					if (isAtTarget()) {
-						System.out.println("AT TARGET!");
 						goToNext();
 					}
-					System.out.println(getNext().getLocation(getSlab().getLocation().getWorld()));
 					Vector direction = getDirection();
 					Vector vector = direction.clone().normalize().multiply(blocksPerTick);
-					System.out.println(vector);
 					getSlab().moveRelative(vector);
 				}
 			};

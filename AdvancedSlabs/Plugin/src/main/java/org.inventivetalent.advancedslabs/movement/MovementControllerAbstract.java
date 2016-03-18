@@ -37,9 +37,9 @@ import org.inventivetalent.advancedslabs.slab.AdvancedSlab;
 public abstract class MovementControllerAbstract {
 
 	public final SlabPath path;
-	public boolean moving     = false;
-	public int     pointIndex = 0;
-	public double blocksPerTick = 0.0625D;
+	public boolean moving        = false;
+	public int     pointIndex    = 0;
+	public double  blocksPerTick = 0.0625D;
 
 	public MovementControllerAbstract(SlabPath path) {
 		this.path = path;
@@ -62,21 +62,15 @@ public abstract class MovementControllerAbstract {
 	}
 
 	public Vector getDirection() {
-		PathPoint current = getCurrent();
 		PathPoint next = getNext();
-
-		System.out.println("slab:  " + getSlab().getLocation());
-		System.out.println("next:  " + next.getLocation(getSlab().getLocation().getWorld()));
 
 		return new Vector(next.getX() - getSlab().getLocation().getX(), next.getY() - getSlab().getLocation().getY(), next.getZ() - getSlab().getLocation().getZ());
 	}
 
 	public boolean isAtTarget() {//target == next block
-		PathPoint current = getCurrent();
 		PathPoint next = getNext();
 		double distance = next.getLocation(getSlab().getLocation().getWorld()).distance(getSlab().getLocation());
-		System.out.println(distance);
-		return distance<blocksPerTick;
+		return distance < blocksPerTick;
 	}
 
 	public abstract void move();
