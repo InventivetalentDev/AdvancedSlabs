@@ -26,32 +26,59 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.advancedslabs.item;
+package org.inventivetalent.advancedslabs.movement;
 
-import org.bukkit.Bukkit;
+import org.bukkit.util.Vector;
 import org.inventivetalent.advancedslabs.AdvancedSlabs;
+import org.inventivetalent.advancedslabs.movement.path.PathPoint;
+import org.inventivetalent.advancedslabs.movement.path.SlabPath;
+import org.inventivetalent.advancedslabs.slab.AdvancedSlab;
 
-public class ItemManager {
+public abstract class MovementControllerAbstract {
 
-	private AdvancedSlabs plugin;
+	public final SlabPath path;
+	public boolean moving     = false;
+	public int     pointIndex = 0;
+	public double blocksPerTick = 0.0625D;
 
-	public static final EditorWand        editorWand        = new EditorWand();
-	public static final PathWand          pathWand          = new PathWand();
-	public static final AdvancedSlabBlock advancedSlabBlock = new AdvancedSlabBlock();
-
-	public static final AdvancedSlabItem[] ITEMS = new AdvancedSlabItem[] {
-			editorWand,
-			pathWand,
-			advancedSlabBlock };
-
-	public ItemManager(AdvancedSlabs plugin) {
-		this.plugin = plugin;
-
-		for (AdvancedSlabItem item : ITEMS) {
-			if (item.getRecipe() != null) {
-				Bukkit.addRecipe(item.getRecipe());
-			}
-		}
+	public MovementControllerAbstract(SlabPath path) {
+		this.path = path;
 	}
+
+	public AdvancedSlab getSlab() {
+		return AdvancedSlabs.instance.slabManager.getSlabForPath(this.path);
+	}
+
+	public abstract PathPoint getNext();
+
+	public abstract PathPoint goToNext();
+
+	public abstract PathPoint getPrevious();
+
+	public abstract PathPoint goToPrevious();
+
+	public PathPoint getCurrent() {
+		return this.path.getPoint(pointIndex);
+	}
+
+	public Vector getDirection() {
+		PathPoint current = getCurrent();
+		PathPoint next = getNext();
+
+		System.out.println("slab:  " + getSlab().getLocation());
+		System.out.println("next:  " + next.getLocation(getSlab().getLocation().getWorld()));
+
+		return new Vector(next.getX() - getSlab().getLocation().getX(), next.getY() - getSlab().getLocation().getY(), next.getZ() - getSlab().getLocation().getZ());
+	}
+
+	public boolean isAtTarget() {//target == next block
+		PathPoint current = getCurrent();
+		PathPoint next = getNext();
+		double distance = next.getLocation(getSlab().getLocation().getWorld()).distance(getSlab().getLocation());
+		System.out.println(distance);
+		return distance<blocksPerTick;
+	}
+
+	public abstract void move();
 
 }

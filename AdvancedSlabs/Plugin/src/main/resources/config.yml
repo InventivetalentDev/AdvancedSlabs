@@ -17,6 +17,21 @@ items:
         lore:
         - "&7Right-Click to edit!"
         - "&7Shift right-click to remove"
+  movement:
+    path:
+      wand:
+        type: "LEASH"
+        meta:
+          display: "&6Path Wand"
+          lore:
+          - "&7Right-Click to edit a path"
+          - "&7Shift right-click to add block point"
+          - "&7Shift left-click to remove block point"
+          - " "
+          - "&7Shift left-click in air to reset"
+          - " "
+          - "&7Right-click slab to bind"
+          - "&7Left-click slab to unbind"
 recipes:
   editor:
     wand:
@@ -31,6 +46,20 @@ recipes:
           type: "REDSTONE"
         s:
           type: "STICK"
+  movement:
+    path:
+      wand:
+        shape:
+        - "rdr"
+        - "dld"
+        - "rdr"
+        ingredients:
+          r:
+            type: "REDSTONE"
+          d:
+            type: "DIAMOND"
+          l:
+            type: "LEASH"
 messages:
   editor:
     editing: "&aYou are now editing this block."
@@ -40,6 +69,29 @@ messages:
     error:
       solidBlock: "&eSorry, you cannot place this block above a solid block."
       noPermission: "&cYou cannot edit this block."
+    path:
+      reset: "&aYou are no longer editing a path"
+      start: "&aYou started a new path"
+      edit: "&aYou are now editing this path"
+      empty: "&aThis path is now empty and will be deleted if it stays empty."
+      bound: "&aPath bound to slab"
+      unbound: "&aPath unbound from slab"
+      point:
+        added: "&aPoint added"
+        removed: "§cPoint removed"
+      type:
+        format: "&6%s &8- &7%s"
+        circular:
+          toggle:
+            description: "Go directly to the start when at the end. Repeat until toggled off"
+        reverse:
+          toggle:
+            description: "Move the path in reversed order when at the end. Repeat until toggled off"
+      speed:
+        format: "&aPath speed: &7%s (blocks per tick)"
+      error:
+        notEditing: "&cYou are not editing a path"
+        notFound: "&cCould not find a path"
   error:
     invalidMaterial: "&cInvalid Material: %s"
     notOnline: "&cPlayer %s is not online"

@@ -90,6 +90,7 @@
                                     <include>org.inventivetalent:apimanager**</include>
                                     <include>org.inventivetalent.packetlistener**</include>
                                     <include>org.inventivetalent:glowapi**</include>
+                                    <include>org.inventivetalent:particleapi**</include>
 
                                     <include>org.inventivetalent.advancedslabs:**</include>
                                 </includes>
@@ -184,6 +185,11 @@
             <groupId>org.inventivetalent</groupId>
             <artifactId>glowapi</artifactId>
             <version>[1.3.1,)</version>
+        </dependency>
+        <dependency>
+            <groupId>org.inventivetalent</groupId>
+            <artifactId>particleapi</artifactId>
+            <version>[2.0.0,)</version>
         </dependency>
     </dependencies>
 

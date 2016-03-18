@@ -30,9 +30,11 @@ package org.inventivetalent.advancedslabs;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -40,6 +42,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -50,6 +53,11 @@ import org.inventivetalent.advancedslabs.editor.BlockEditor;
 import org.inventivetalent.advancedslabs.editor.EditorManager;
 import org.inventivetalent.advancedslabs.item.ItemListener;
 import org.inventivetalent.advancedslabs.item.ItemManager;
+import org.inventivetalent.advancedslabs.movement.PathMovementTask;
+import org.inventivetalent.advancedslabs.movement.path.PathManager;
+import org.inventivetalent.advancedslabs.movement.path.PathParticleTask;
+import org.inventivetalent.advancedslabs.movement.path.editor.PathEditor;
+import org.inventivetalent.advancedslabs.movement.path.editor.PathEditorManager;
 import org.inventivetalent.advancedslabs.slab.AdvancedSlab;
 import org.inventivetalent.advancedslabs.slab.FallingBlockResetTask;
 import org.inventivetalent.advancedslabs.slab.SlabManager;
@@ -70,19 +78,26 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 
 	public static AdvancedSlabs instance;
 
-	public SlabManager   slabManager;
-	public EditorManager editorManager;
-	public ItemManager   itemManager;
-	public EntityManager entityManager;
+	public SlabManager       slabManager;
+	public PathManager       pathManager;
+	public EditorManager     editorManager;
+	public PathEditorManager pathEditorManager;
+	public ItemManager       itemManager;
+	public EntityManager     entityManager;
 
 	public PacketListener packetListener;
 
 	public MessageContainer messages;
 
 	public FallingBlockResetTask fallingBlockResetTask;
+	public PathParticleTask      pathParticleTask;
+	public PathMovementTask      pathMovementTask;
 
 	File    slabFile   = new File(getDataFolder(), "slabs.json");
-	boolean firstStart = !slabFile.exists();
+	File    pathFile   = new File(getDataFolder(), "paths.json");
+	boolean firstStart = !slabFile.exists() || !pathFile.exists();
+
+	public boolean spawningSlab = false;
 
 	@Override
 	public void onLoad() {
@@ -105,9 +120,18 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 				getLogger().log(Level.SEVERE, "Failed to create slab file", e);
 			}
 		}
+		if (!pathFile.exists()) {
+			try {
+				pathFile.createNewFile();
+			} catch (Exception e) {
+				getLogger().log(Level.SEVERE, "Failed to create path file", e);
+			}
+		}
 
 		this.slabManager = new SlabManager(this);
+		this.pathManager = new PathManager(this);
 		this.editorManager = new EditorManager(this);
+		this.pathEditorManager = new PathEditorManager(this);
 		this.itemManager = new ItemManager(this);
 		this.entityManager = new EntityManager(this);
 
@@ -115,6 +139,12 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 
 		this.fallingBlockResetTask = new FallingBlockResetTask(this);
 		this.fallingBlockResetTask.runTaskTimer(this, 20, 20);
+
+		this.pathParticleTask = new PathParticleTask(this);
+		this.pathParticleTask.runTaskTimer(this, 10, 10);
+
+		this.pathMovementTask = new PathMovementTask(this);
+		this.pathMovementTask.runTaskTimer(this, 1, 1);
 
 		Bukkit.getPluginManager().registerEvents(this, this);
 		Bukkit.getPluginManager().registerEvents(new ItemListener(this), this);
@@ -135,13 +165,29 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 				.withMessage("respawn", "§aRespawned nearby slab entities")//
 				.withMessage("error.invalidMaterial", "§cInvalid Material: %s")//
 				.withMessage("error.notOnline", "§cPlayer %s is not online")//
+				.withMessage("editor.path.reset", "§aYou are no longer editing a path")//
+				.withMessage("editor.path.point.added", "§aPoint added")//
+				.withMessage("editor.path.point.removed", "§cPoint removed")//
+				.withMessage("editor.path.start", "§aYou started a new path")//
+				.withMessage("editor.path.edit", "§aYou are now editing this path")//
+				.withMessage("editor.path.error.notEditing", "§cYou are not editing a path")//
+				.withMessage("editor.path.error.notFound", "§cCould not find a path")//
+				.withMessage("editor.path.empty", "§7This path is now empty and will be deleted if it stays empty")//
+				.withMessage("editor.path.type.format", "§6%s §8- §7%s")//
+				.withMessage("editor.path.type.circular.toggle.description", "Go directly to the start when at the end. Repeat until toggled off")//
+				.withMessage("editor.path.type.reverse.toggle.description", "Move the path in reversed order when at the end. Repeat until toggled off")//
+				.withMessage("editor.path.speed.format", "§aSpeed: §7%s")//
+				.withMessage("editor.path.bound", "§aPath bound to slab")//
+				.withMessage("editor.path.unbound", "§aPath unbound from slab")//
 				;
+
 		this.messages = messageBuilder.fromConfig(getConfig().getConfigurationSection("messages")).build();
 
 		Bukkit.getScheduler().runTaskLater(this, new Runnable() {
 			@Override
 			public void run() {
 				getLogger().info("Loading data...");
+				loadPaths();
 				loadSlabs();
 			}
 		}, 40);
@@ -163,6 +209,7 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 	public void onDisable() {
 		getLogger().info("Saving data...");
 		saveSlabs();
+		savePaths();
 
 		if (this.packetListener != null) {
 			this.packetListener.disable();
@@ -171,7 +218,7 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 
 	@EventHandler
 	public void onScroll(PlayerItemHeldEvent event) {
-		if (editorManager.isEditing(event.getPlayer().getUniqueId())) {
+		if (editorManager.isEditing(event.getPlayer().getUniqueId()) || pathEditorManager.isEditing(event.getPlayer().getUniqueId())) {
 			int from = event.getPreviousSlot();
 			int to = event.getNewSlot();
 
@@ -185,9 +232,27 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 			final boolean decrease = to > from;
 			final boolean increase = to < from;
 
+			if (event.getPlayer().isSneaking()) {
+				PathEditor pathEditor = pathEditorManager.getEditor(event.getPlayer().getUniqueId());
+				if (pathEditor != null) {
+					pathEditor.handleScroll(increase, decrease, event.getPlayer().isSneaking());
+					return;//Prioritize the path editor
+				}
+			}
+
 			BlockEditor editor = editorManager.getEditor(event.getPlayer().getUniqueId());
 			if (editor != null) {
 				editor.handleScroll(increase, decrease, event.getPlayer().isSneaking());
+			}
+		}
+	}
+
+	@EventHandler
+	public void onItemDrop(PlayerDropItemEvent event) {
+		if (pathEditorManager.isEditing(event.getPlayer().getUniqueId())) {
+			PathEditor editor = pathEditorManager.getEditor(event.getPlayer().getUniqueId());
+			if (editor != null) {
+				editor.handleDrop(event);
 			}
 		}
 	}
@@ -211,18 +276,20 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 			((FallingBlock) event.getEntity()).setTicksLived(1);
 			event.setCancelled(true);
 
-			AdvancedSlab slab = slabManager.getSlabForEntity(event.getEntity());
-			if (slab != null) {
-				if (editorManager.getEditorForSlab(slab) == null) {
-					slabManager.removeSlab(slab);
-					slabManager.createSlab(slab.getLocation(), slab.getMaterialData().getItemType(), slab.getMaterialData().getData());
-				}
-			}
+//			AdvancedSlab slab = slabManager.getSlabForEntity(event.getEntity());
+//			if (slab != null) {
+//				if (editorManager.getEditorForSlab(slab) == null) {
+//					slabManager.removeSlab(slab);
+//					slabManager.createSlab(slab.getLocation(), slab.getMaterialData().getItemType(), slab.getMaterialData().getData());
+//				}
+//			}
 		}
 	}
 
 	@EventHandler
 	public void on(EntityDeathEvent event) {
+		System.out.println(event);
+		System.out.println(event.getEntity());
 		AdvancedSlab slab = slabManager.getSlabForEntity(event.getEntity());
 		if (slab != null) {
 			if (slab.despawned) {
@@ -234,6 +301,13 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void on(CreatureSpawnEvent event) {
+		if (spawningSlab) {
+			if (event.isCancelled()) {
+				if (event.getEntityType() == EntityType.SHULKER) {
+					event.setCancelled(false);
+				}
+			}
+		}
 	}
 
 	public Team getCollisionTeam() {
@@ -247,15 +321,12 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 
 	public void saveSlabs() {
 		JsonArray slabArray = slabManager.toJson();
+		writeJson(slabArray, slabFile);
+	}
 
-		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(slabFile));
-			writer.write(new GsonBuilder().setPrettyPrinting().create().toJson(slabArray));
-			writer.flush();
-			writer.close();
-		} catch (Exception e) {
-			throw new RuntimeException("Failed to save slabs", e);
-		}
+	public void savePaths() {
+		JsonArray pathArray = pathManager.toJson();
+		writeJson(pathArray, pathFile);
 	}
 
 	public void loadSlabs() {
@@ -265,6 +336,27 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 			if (!firstStart) {
 				throw new RuntimeException("Failed to load slabs", e);
 			}//Ignore on first start, since the file is empty
+		}
+	}
+
+	public void loadPaths() {
+		try {
+			pathManager.loadJson(new JsonParser().parse(new FileReader(pathFile)).getAsJsonArray());
+		} catch (Exception e) {
+			if (!firstStart) {
+				throw new RuntimeException("Failed to load paths", e);
+			}
+		}
+	}
+
+	void writeJson(JsonElement jsonElement, File file) {
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+			writer.write(new GsonBuilder().setPrettyPrinting().create().toJson(jsonElement));
+			writer.flush();
+			writer.close();
+		} catch (Exception e) {
+			throw new RuntimeException("Failed to write json", e);
 		}
 	}
 

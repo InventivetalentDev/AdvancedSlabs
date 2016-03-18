@@ -26,82 +26,57 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.advancedslabs.slab;
+package org.inventivetalent.advancedslabs.movement.path.editor;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.entity.Entity;
 import org.inventivetalent.advancedslabs.AdvancedSlabs;
+import org.inventivetalent.advancedslabs.movement.path.PathPoint;
 import org.inventivetalent.advancedslabs.movement.path.SlabPath;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
-public class SlabManager {
+public class PathEditorManager {
 
 	private AdvancedSlabs plugin;
-	public final Set<AdvancedSlab> slabs = new HashSet<>();
+	public final Map<UUID, PathEditor> editorMap = new HashMap<>();
 
-	public SlabManager(AdvancedSlabs plugin) {
+	public PathEditorManager(AdvancedSlabs plugin) {
 		this.plugin = plugin;
 	}
 
-	public AdvancedSlab createSlab(Location location, Material material, byte data) {
-		AdvancedSlab slab = new AdvancedSlab(location);
-		slab.setMaterial(material, data);
-
-		plugin.getCollisionTeam().addEntry(slab.getShulkerUUID().toString());
-
-		slabs.add(slab);
-		return slab;
+	public PathEditor getEditor(UUID uuid) {
+		return editorMap.get(uuid);
 	}
 
-	public void removeSlab(AdvancedSlab slab) {
-		System.out.println(slabs);
-		slabs.remove(slab);
-		slab.despawn();
-		System.out.println(slabs);
-	}
-
-	public AdvancedSlab getSlabForEntity(Entity entity) {
-		return getSlabForUUID(entity.getUniqueId());
-	}
-
-	public AdvancedSlab getSlabForUUID(UUID uuid) {
-		for (AdvancedSlab slab : slabs) {
-			if (slab.getArmorStandUUID().equals(uuid) || slab.getShulkerUUID().equals(uuid) || slab.getFallingBlockUUID().equals(uuid)) {
-				return slab;
+	public PathEditor getEditorForPathBlock(Location location) {
+		for (PathEditor editor : editorMap.values()) {
+			if (editor.path == null) { continue; }
+			for (PathPoint point : editor.path.points) {
+				if (point.isAt(location)) { return editor; }
 			}
 		}
 		return null;
 	}
 
-	public AdvancedSlab getSlabForPath(SlabPath path) {
-		for (AdvancedSlab slab : slabs) {
-			if (slab.path == path.id) {
-				return slab;
-			}
-		}
-		return null;
+	public PathEditor newEditor(UUID uuid, SlabPath path) {
+		removeEditor(uuid);
+
+		PathEditor editor = new PathEditor();
+		editor.player = uuid;
+		editor.path = path;
+		editorMap.put(uuid, editor);
+
+		return editor;
 	}
 
-	public JsonArray toJson() {
-		JsonArray array = new JsonArray();
-		for (AdvancedSlab slab : slabs) {
-			array.add(slab.toJson());
-		}
-		return array;
+	public void removeEditor(UUID uuid) {
+		PathEditor editor = editorMap.remove(uuid);
 	}
 
-	public void loadJson(JsonArray jsonArray) {
-		for (Iterator<JsonElement> iterator = jsonArray.iterator(); iterator.hasNext(); ) {
-			JsonElement next = iterator.next();
-			slabs.add(new AdvancedSlab(next.getAsJsonObject()));
-		}
+	public boolean isEditing(UUID uuid) {
+		return editorMap.containsKey(uuid);
 	}
 
 }

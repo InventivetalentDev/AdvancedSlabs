@@ -40,6 +40,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.inventivetalent.advancedslabs.editor.EditorManager;
 import org.inventivetalent.advancedslabs.item.ItemManager;
+import org.inventivetalent.advancedslabs.movement.path.SlabPath;
+import org.inventivetalent.advancedslabs.movement.path.editor.PathEditor;
 import org.inventivetalent.advancedslabs.slab.AdvancedSlab;
 import org.inventivetalent.glow.GlowAPI;
 import org.inventivetalent.itembuilder.ItemBuilder;
@@ -62,6 +64,9 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 			if (sender.hasPermission("advancedslabs.wand")) {
 				sender.sendMessage("§a/aslab wand");
 			}
+			if (sender.hasPermission("advancedslabs.pathwand")) {
+				sender.sendMessage("§a/aslab pathwand");
+			}
 			if (sender.hasPermission("advancedslabs.highlight")) {
 				sender.sendMessage("§a/aslab hightlight");
 			}
@@ -77,6 +82,14 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 			if (sender.hasPermission("advancedslabs.wand")) {
 				if (sender instanceof Player) {
 					((Player) sender).getInventory().addItem(ItemManager.editorWand.getItem());
+				}
+				return true;
+			}
+		}
+		if ("pathwand".equalsIgnoreCase(args[0])) {
+			if (sender.hasPermission("advancedslabs.pathwand")) {
+				if (sender instanceof Player) {
+					((Player) sender).getInventory().addItem(ItemManager.pathWand.getItem());
 				}
 				return true;
 			}
@@ -186,6 +199,35 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 				return true;
 			}
 		}
+		if ("pathspeed".equalsIgnoreCase(args[0])) {
+			if (sender.hasPermission("advancedslabs.pathspeed")) {
+				if (sender instanceof Player) {
+					if (!plugin.pathEditorManager.isEditing(((Player) sender).getUniqueId())) {
+						sender.sendMessage(plugin.messages.getMessage("editor.path.error.notEditing"));
+						return false;
+					}
+					if (args.length == 1) {
+						sender.sendMessage("§cPlease specify the speed");
+						return false;
+					}
+					SlabPath path=plugin.pathEditorManager.getEditor(((Player)sender).getUniqueId()).path;
+					try {
+						double speed = Double.parseDouble(args[1]);
+						if (speed > PathEditor.MIN_SPEED&&speed<PathEditor.MAX_SPEED) {
+							path.speed=speed;
+							sender.sendMessage("§aSpeed changed to "+speed);
+						}else{
+							sender.sendMessage("§cSpecified number is too small or too big");
+							return false;
+						}
+					} catch (NumberFormatException e) {
+						sender.sendMessage("§cInvalid number: " + args[1]);
+						return false;
+					}
+
+				}
+			}
+		}
 
 		return false;
 	}
@@ -197,6 +239,9 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 		if (args.length <= 1) {
 			if (sender.hasPermission("advancedslabs.wand")) {
 				list.add("wand");
+			}
+			if (sender.hasPermission("advancedslabs.pathwand")) {
+				list.add("pathwand");
 			}
 			if (sender.hasPermission("advancedslabs.highlight")) {
 				list.add("highlight");

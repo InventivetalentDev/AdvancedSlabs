@@ -26,32 +26,52 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.advancedslabs.item;
+package org.inventivetalent.advancedslabs.movement.path.editor;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.inventivetalent.advancedslabs.AdvancedSlabs;
+import org.inventivetalent.advancedslabs.movement.path.SlabPath;
 
-public class ItemManager {
+import java.util.UUID;
 
-	private AdvancedSlabs plugin;
+public class PathEditor {
 
-	public static final EditorWand        editorWand        = new EditorWand();
-	public static final PathWand          pathWand          = new PathWand();
-	public static final AdvancedSlabBlock advancedSlabBlock = new AdvancedSlabBlock();
+	public static final double MIN_SPEED = 0.001953125D;
+	public static final double MAX_SPEED = 10;//TODO: customizable
 
-	public static final AdvancedSlabItem[] ITEMS = new AdvancedSlabItem[] {
-			editorWand,
-			pathWand,
-			advancedSlabBlock };
+	public UUID     player;
+	public SlabPath path;
 
-	public ItemManager(AdvancedSlabs plugin) {
-		this.plugin = plugin;
+	public Player getPlayer() {
+		return Bukkit.getPlayer(player);
+	}
 
-		for (AdvancedSlabItem item : ITEMS) {
-			if (item.getRecipe() != null) {
-				Bukkit.addRecipe(item.getRecipe());
+	public void handleScroll(boolean increase, boolean decrease, boolean sneaking) {
+		if (sneaking) {
+			if (increase) {
+				if (path.speed < MAX_SPEED) {
+					path.speed += 0.001953125D;
+				}
+			} else {
+				if (path.speed > MIN_SPEED) {
+					path.speed -= 0.001953125D;
+				}
 			}
+			getPlayer().sendMessage(AdvancedSlabs.instance.messages.getMessage("editor.path.speed.format", path.speed));
 		}
+	}
+
+	public void handleDrop(PlayerDropItemEvent event) {
+		if (event.getPlayer().isSneaking()) {
+			path.type = path.type.previous();
+		} else {
+			path.type = path.type.next();
+		}
+		path.movementController = path.type.newController(path);
+		event.getPlayer().sendMessage(path.type.getFormattedDescription());
+		event.setCancelled(true);
 	}
 
 }

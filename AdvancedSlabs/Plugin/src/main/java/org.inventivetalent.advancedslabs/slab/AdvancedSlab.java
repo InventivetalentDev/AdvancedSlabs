@@ -61,6 +61,8 @@ public class AdvancedSlab {
 
 	public UUID owner;
 
+	public int path = -1;//-1 = no path
+
 	public boolean despawned = false;
 
 	public AdvancedSlab(ArmorStand armorStand, Shulker shulker, FallingBlock fallingBlock) {
@@ -75,8 +77,14 @@ public class AdvancedSlab {
 		location.setPitch(0);
 
 		this.location = location;
+		AdvancedSlabs.instance.spawningSlab = true;
 		this.armorStandUUID = (this.armorStand = location.getWorld().spawn(location, ArmorStand.class)).getUniqueId();
 		this.shulkerUUID = (this.shulker = location.getWorld().spawn(location, Shulker.class)).getUniqueId();
+		AdvancedSlabs.instance.spawningSlab = false;
+
+		System.out.println(this.shulkerUUID);
+		System.out.println(this.shulker);
+		System.out.println(this.shulker.isDead());
 
 		this.armorStand.setGravity(false);
 		this.armorStand.setVisible(false);
@@ -109,6 +117,9 @@ public class AdvancedSlab {
 			} catch (Exception e) {
 				AdvancedSlabs.instance.getLogger().log(Level.WARNING, "Invalid owner", e);
 			}
+		}
+		if (jsonObject.has("path")) {
+			this.path = jsonObject.get("path").getAsInt();
 		}
 
 		refreshEntities();
@@ -177,29 +188,17 @@ public class AdvancedSlab {
 	}
 
 	public void move(Location location) {
+		System.out.println("move "+location);
+		System.out.println(despawned);
 		if (despawned) { return; }
 		location.setPitch(0);
 		location.setYaw(0);
 
 		this.location = location;
 
-		this.armorStand.setPassenger(null);
+		EntityHelper.setPosition(getArmorStand(), location.getX(), location.getY(), location.getZ());
 
-		if (this.fallingBlock != null) {
-			this.fallingBlock.allowDeath();
-			this.fallingBlock.stopRiding();
-		}
-		EntityHelper.stopRiding(getShulker());
-
-		this.armorStand.teleport(location);
-		this.shulker.teleport(location);
-		if (this.fallingBlock != null) { this.fallingBlock.teleport(location); }
-
-		if (this.fallingBlock == null || this.fallingBlock.isDead()) {
-			respawnFallingBlock();
-		}
-
-		reStackEntities();
+//		reStackEntities();
 	}
 
 	public void moveRelative(Vector vector) {
@@ -219,6 +218,7 @@ public class AdvancedSlab {
 	}
 
 	public void despawn() {
+		System.out.println("despawn()");
 		despawned = true;
 		if (getFallingBlock() != null) {
 			getFallingBlock().allowDeath();
@@ -268,6 +268,9 @@ public class AdvancedSlab {
 		if (AdvancedSlabs.instance.getConfig().getBoolean("slabOwners") && this.owner != null) {
 			jsonObject.addProperty("owner", this.owner.toString());
 		}
+		if (this.path != -1) {
+			jsonObject.addProperty("path", this.path);
+		}
 
 		return jsonObject;
 	}
@@ -282,7 +285,6 @@ public class AdvancedSlab {
 		if (armorStandUUID != null ? !armorStandUUID.equals(slab.armorStandUUID) : slab.armorStandUUID != null) { return false; }
 		if (shulkerUUID != null ? !shulkerUUID.equals(slab.shulkerUUID) : slab.shulkerUUID != null) { return false; }
 		if (fallingBlockUUID != null ? !fallingBlockUUID.equals(slab.fallingBlockUUID) : slab.fallingBlockUUID != null) { return false; }
-		if (location != null ? !location.equals(slab.location) : slab.location != null) { return false; }
 		return materialData != null ? materialData.equals(slab.materialData) : slab.materialData == null;
 
 	}
@@ -292,7 +294,6 @@ public class AdvancedSlab {
 		int result = armorStandUUID != null ? armorStandUUID.hashCode() : 0;
 		result = 31 * result + (shulkerUUID != null ? shulkerUUID.hashCode() : 0);
 		result = 31 * result + (fallingBlockUUID != null ? fallingBlockUUID.hashCode() : 0);
-		result = 31 * result + (location != null ? location.hashCode() : 0);
 		result = 31 * result + (materialData != null ? materialData.hashCode() : 0);
 		return result;
 	}

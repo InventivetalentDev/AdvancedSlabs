@@ -90,4 +90,12 @@ public class EntityHelper {
 		}
 	}
 
+	public static void setPosition(Object entity, double x, double y, double z) {
+		try {
+			EntityMethodResolver.resolve(new ResolverQuery("setPosition", double.class, double.class, double.class)).invoke(Minecraft.getHandle(entity), x, y, z);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 }

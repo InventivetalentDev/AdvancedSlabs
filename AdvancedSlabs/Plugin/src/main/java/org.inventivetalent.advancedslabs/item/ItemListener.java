@@ -32,6 +32,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -78,6 +79,13 @@ public class ItemListener implements Listener {
 	public void on(BlockPlaceEvent event) {
 		for (AdvancedSlabItem item : ItemManager.ITEMS) {
 			item.tryHandleBlockPlace(event);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void on(EntityDamageByEntityEvent event) {
+		for (AdvancedSlabItem item : ItemManager.ITEMS) {
+			item.tryHandleEntityDamge(event);
 		}
 	}
 

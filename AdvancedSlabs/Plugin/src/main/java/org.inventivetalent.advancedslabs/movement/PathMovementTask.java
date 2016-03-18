@@ -26,82 +26,29 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.advancedslabs.slab;
+package org.inventivetalent.advancedslabs.movement;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.entity.Entity;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.inventivetalent.advancedslabs.AdvancedSlabs;
 import org.inventivetalent.advancedslabs.movement.path.SlabPath;
+import org.inventivetalent.advancedslabs.slab.AdvancedSlab;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.UUID;
-
-public class SlabManager {
+public class PathMovementTask extends BukkitRunnable {
 
 	private AdvancedSlabs plugin;
-	public final Set<AdvancedSlab> slabs = new HashSet<>();
 
-	public SlabManager(AdvancedSlabs plugin) {
+	public PathMovementTask(AdvancedSlabs plugin) {
 		this.plugin = plugin;
 	}
 
-	public AdvancedSlab createSlab(Location location, Material material, byte data) {
-		AdvancedSlab slab = new AdvancedSlab(location);
-		slab.setMaterial(material, data);
-
-		plugin.getCollisionTeam().addEntry(slab.getShulkerUUID().toString());
-
-		slabs.add(slab);
-		return slab;
-	}
-
-	public void removeSlab(AdvancedSlab slab) {
-		System.out.println(slabs);
-		slabs.remove(slab);
-		slab.despawn();
-		System.out.println(slabs);
-	}
-
-	public AdvancedSlab getSlabForEntity(Entity entity) {
-		return getSlabForUUID(entity.getUniqueId());
-	}
-
-	public AdvancedSlab getSlabForUUID(UUID uuid) {
-		for (AdvancedSlab slab : slabs) {
-			if (slab.getArmorStandUUID().equals(uuid) || slab.getShulkerUUID().equals(uuid) || slab.getFallingBlockUUID().equals(uuid)) {
-				return slab;
+	@Override
+	public void run() {
+		for (AdvancedSlab slab : plugin.slabManager.slabs) {
+			if (slab.path == -1) { continue; }
+			SlabPath path = plugin.pathManager.getPathById(slab.path);
+			if (path != null) {
+				if (path.isActive()) { path.tick(); }
 			}
 		}
-		return null;
 	}
-
-	public AdvancedSlab getSlabForPath(SlabPath path) {
-		for (AdvancedSlab slab : slabs) {
-			if (slab.path == path.id) {
-				return slab;
-			}
-		}
-		return null;
-	}
-
-	public JsonArray toJson() {
-		JsonArray array = new JsonArray();
-		for (AdvancedSlab slab : slabs) {
-			array.add(slab.toJson());
-		}
-		return array;
-	}
-
-	public void loadJson(JsonArray jsonArray) {
-		for (Iterator<JsonElement> iterator = jsonArray.iterator(); iterator.hasNext(); ) {
-			JsonElement next = iterator.next();
-			slabs.add(new AdvancedSlab(next.getAsJsonObject()));
-		}
-	}
-
 }

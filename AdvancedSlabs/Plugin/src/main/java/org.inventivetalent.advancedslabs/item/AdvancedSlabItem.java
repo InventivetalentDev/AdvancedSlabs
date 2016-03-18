@@ -28,7 +28,9 @@
 
 package org.inventivetalent.advancedslabs.item;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -74,6 +76,14 @@ public abstract class AdvancedSlabItem {
 		}
 	}
 
+	public void tryHandleEntityDamge(EntityDamageByEntityEvent event) {
+		if (event.getDamager() instanceof Player) {
+			if (((Player) event.getDamager()).getItemInHand().equals(getItem())) {
+				handleEntityDamage(event);
+			}
+		}
+	}
+
 	public void handlePrepareCraft(PrepareItemCraftEvent event) {
 	}
 
@@ -87,6 +97,9 @@ public abstract class AdvancedSlabItem {
 	}
 
 	public void handleBlockPlace(BlockPlaceEvent event) {
+	}
+
+	public void handleEntityDamage(EntityDamageByEntityEvent event) {
 	}
 
 }
