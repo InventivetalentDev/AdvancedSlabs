@@ -81,11 +81,11 @@ public abstract class MovementControllerAbstract {
 	public boolean isAtTarget(AdvancedSlab slab) {//target == next block
 		PathPoint next = getNext(slab);
 		double distance = next.getLocation(slab.getLocation().getWorld()).distance(slab.getLocation());
-		return distance < blocksPerTick;
+		return distance < blocksPerTick/2;
 	}
 
 	public void move() {
-		System.out.println(getSlabs());
+		if(!active)return;
 		for (AdvancedSlab slab : getSlabs()) {
 			move(slab);
 		}
