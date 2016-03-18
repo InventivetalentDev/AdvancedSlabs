@@ -15,8 +15,8 @@ items:
       meta:
         display: "&bEditor Wand"
         lore:
-        - "&7Right-Click to edit!"
-        - "&7Shift right-click to remove"
+        - "&8Right-Click &7to edit!"
+        - "&8Shift right-click &7to remove"
   movement:
     path:
       wand:
@@ -24,14 +24,14 @@ items:
         meta:
           display: "&6Path Wand"
           lore:
-          - "&7Right-Click to edit a path"
-          - "&7Shift right-click to add block point"
-          - "&7Shift left-click to remove block point"
+          - "&8Right-Click &7to edit a path"
+          - "&8Shift right-click &7to add block point"
+          - "&8Shift left-click &7to remove block point"
           - " "
-          - "&7Shift left-click in air to reset"
+          - "&8Shift left-click &7in air to reset"
           - " "
-          - "&7Right-click slab to bind"
-          - "&7Left-click slab to unbind"
+          - "&8Right-click slab &7to bind"
+          - "&8Left-click slab &7to unbind"
 recipes:
   editor:
     wand:
