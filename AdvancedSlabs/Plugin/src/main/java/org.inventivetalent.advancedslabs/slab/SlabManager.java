@@ -78,13 +78,24 @@ public class SlabManager {
 		return null;
 	}
 
-	public AdvancedSlab getSlabForPath(SlabPath path) {
+	@Deprecated
+	public AdvancedSlab getFirstSlabForPath(SlabPath path) {
 		for (AdvancedSlab slab : slabs) {
 			if (slab.path == path.id) {
 				return slab;
 			}
 		}
 		return null;
+	}
+
+	public Set<AdvancedSlab> getSlabsForPath(SlabPath path) {
+		Set<AdvancedSlab> slabs = new HashSet<>();
+		for (AdvancedSlab slab : this.slabs) {
+			if (slab.path == path.id) {
+				slabs.add(slab);
+			}
+		}
+		return slabs;
 	}
 
 	public JsonArray toJson() {

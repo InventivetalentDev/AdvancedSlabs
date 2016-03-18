@@ -40,13 +40,14 @@ import org.bukkit.util.Vector;
 import org.inventivetalent.advancedslabs.AdvancedSlabs;
 import org.inventivetalent.advancedslabs.EntityHelper;
 import org.inventivetalent.advancedslabs.entity.ISlabFallingBlock;
+import org.inventivetalent.advancedslabs.movement.path.PathPassenger;
 import org.inventivetalent.reflection.minecraft.Minecraft;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
 import java.util.logging.Level;
 
-public class AdvancedSlab {
+public class AdvancedSlab implements PathPassenger {
 
 	private final UUID     armorStandUUID;
 	private final UUID     shulkerUUID;
@@ -61,7 +62,8 @@ public class AdvancedSlab {
 
 	public UUID owner;
 
-	public int path = -1;//-1 = no path
+	public int path           = -1;//-1 = no path
+	public int pathPointIndex = 0;
 
 	public boolean despawned = false;
 
@@ -238,6 +240,16 @@ public class AdvancedSlab {
 				if (entity.getUniqueId().equals(this.fallingBlockUUID)) { this.fallingBlock = (ISlabFallingBlock) entity; }
 			}
 		}
+	}
+
+	@Override
+	public int getPointIndex() {
+		return pathPointIndex;
+	}
+
+	@Override
+	public void setPointIndex(int index) {
+		pathPointIndex = index;
 	}
 
 	public JsonObject toJson() {
