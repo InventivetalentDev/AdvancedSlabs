@@ -210,13 +210,13 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 						sender.sendMessage("§cPlease specify the speed");
 						return false;
 					}
-					SlabPath path=plugin.pathEditorManager.getEditor(((Player)sender).getUniqueId()).path;
+					SlabPath path = plugin.pathEditorManager.getEditor(((Player) sender).getUniqueId()).path;
 					try {
 						double speed = Double.parseDouble(args[1]);
-						if (speed > PathEditor.MIN_SPEED&&speed<PathEditor.MAX_SPEED) {
-							path.speed=speed;
-							sender.sendMessage("§aSpeed changed to "+speed);
-						}else{
+						if (speed > PathEditor.MIN_SPEED && speed < PathEditor.MAX_SPEED) {
+							path.speed = speed;
+							sender.sendMessage("§aSpeed changed to " + speed);
+						} else {
 							sender.sendMessage("§cSpecified number is too small or too big");
 							return false;
 						}
