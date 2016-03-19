@@ -139,7 +139,7 @@ public class PathWand extends AdvancedSlabItem {
 	}
 
 	@Override
-	public void tryHandleEntityDamge(EntityDamageByEntityEvent event) {
+	public void handleEntityDamage(EntityDamageByEntityEvent event) {
 		AdvancedSlab slab = AdvancedSlabs.instance.slabManager.getSlabForEntity(event.getEntity());
 		if (slab != null) {
 			if (AdvancedSlabs.instance.pathEditorManager.isEditing(((Player) event.getDamager()).getUniqueId())) {
