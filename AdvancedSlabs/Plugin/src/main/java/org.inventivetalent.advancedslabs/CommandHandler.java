@@ -68,7 +68,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 				sender.sendMessage("§a/aslab pathwand");
 			}
 			if (sender.hasPermission("advancedslabs.highlight")) {
-				sender.sendMessage("§a/aslab hightlight");
+				sender.sendMessage("§a/aslab highlight");
 			}
 			if (sender.hasPermission("advancedslabs.reload")) {
 				sender.sendMessage("§a/aslab reload");
