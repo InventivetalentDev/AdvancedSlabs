@@ -48,7 +48,7 @@ public enum PathType {
 			return new ReverseSwitchController(path);
 		}
 	},
-	REVERSE_TOGGLE("editor.path.type.reverse.toggle") {
+	REVERSE_TOGGLE("editor.path.type.reverse.toggle.description") {
 		@Override
 		public MovementControllerAbstract newController(SlabPath path) {
 			return new ReverseToggleController(path);
