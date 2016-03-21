@@ -125,6 +125,7 @@ public class AdvancedSlab implements PathPassenger {
 
 	public void setMaterial(Material material, byte data) {
 		if (getFallingBlock() != null) {
+			getFallingBlock().stopRiding();
 			getFallingBlock().allowDeath();
 			getFallingBlock().remove();
 		}
@@ -191,7 +192,7 @@ public class AdvancedSlab implements PathPassenger {
 
 		this.location = location;
 
-		EntityHelper.setPosition(getArmorStand(), location.getX(), location.getY(), location.getZ());
+		if (getArmorStand() != null) { EntityHelper.setPosition(getArmorStand(), location.getX(), location.getY(), location.getZ()); }
 
 		//		reStackEntities();
 	}
