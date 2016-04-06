@@ -32,6 +32,7 @@ import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.inventivetalent.advancedslabs.AdvancedSlabs;
+import org.inventivetalent.advancedslabs.api.IAdvancedSlab;
 import org.inventivetalent.advancedslabs.slab.AdvancedSlab;
 import org.inventivetalent.glow.GlowAPI;
 
@@ -61,7 +62,7 @@ public class EditorManager {
 		return null;
 	}
 
-	public BlockEditor newEditor(UUID uuid, AdvancedSlab slab) {
+	public BlockEditor newEditor(UUID uuid, IAdvancedSlab slab) {
 		removeEditor(uuid);
 
 		BlockEditor editor = new BlockEditor();
@@ -76,7 +77,7 @@ public class EditorManager {
 		return editor;
 	}
 
-	public static void setGlowing(AdvancedSlab slab, Player receiver) {
+	public static void setGlowing(IAdvancedSlab slab, Player receiver) {
 		Material type = slab.getMaterialData().getItemType();
 		boolean colorable = type == Material.STAINED_GLASS_PANE || type == Material.STAINED_GLASS || type == Material.STAINED_CLAY || type == Material.WOOL;
 

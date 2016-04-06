@@ -47,6 +47,10 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Team;
+import org.inventivetalent.advancedslabs.api.AdvancedSlabsAPI;
+import org.inventivetalent.advancedslabs.api.IAdvancedSlab;
+import org.inventivetalent.advancedslabs.api.ISlabManager;
+import org.inventivetalent.advancedslabs.api.path.IPathManager;
 import org.inventivetalent.advancedslabs.editor.BlockEditor;
 import org.inventivetalent.advancedslabs.editor.EditorManager;
 import org.inventivetalent.advancedslabs.item.ItemListener;
@@ -56,7 +60,6 @@ import org.inventivetalent.advancedslabs.movement.path.PathManager;
 import org.inventivetalent.advancedslabs.movement.path.PathParticleTask;
 import org.inventivetalent.advancedslabs.movement.path.editor.PathEditor;
 import org.inventivetalent.advancedslabs.movement.path.editor.PathEditorManager;
-import org.inventivetalent.advancedslabs.slab.AdvancedSlab;
 import org.inventivetalent.advancedslabs.slab.FallingBlockResetTask;
 import org.inventivetalent.advancedslabs.slab.SlabManager;
 import org.inventivetalent.apihelper.APIManager;
@@ -96,6 +99,19 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 	boolean firstStart = !slabFile.exists() || !pathFile.exists();
 
 	public boolean spawningSlab = false;
+
+
+	protected AdvancedSlabsAPI api=new AdvancedSlabsAPI() {
+		@Override
+		public ISlabManager getSlabManager() {
+			return slabManager;
+		}
+
+		@Override
+		public IPathManager getPathManager() {
+			return pathManager;
+		}
+	};
 
 	@Override
 	public void onLoad() {
@@ -213,6 +229,10 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 		}
 	}
 
+	public AdvancedSlabsAPI getApi() {
+		return api;
+	}
+
 	@EventHandler
 	public void onScroll(PlayerItemHeldEvent event) {
 		if (editorManager.isEditing(event.getPlayer().getUniqueId()) || pathEditorManager.isEditing(event.getPlayer().getUniqueId())) {
@@ -270,9 +290,9 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 
 	@EventHandler
 	public void on(EntityDeathEvent event) {
-		AdvancedSlab slab = slabManager.getSlabForEntity(event.getEntity());
+		IAdvancedSlab slab = slabManager.getSlabForEntity(event.getEntity());
 		if (slab != null) {
-			if (slab.despawned) {
+			if (slab.isDespawned()) {
 				slabManager.removeSlab(slab);
 			}
 		}

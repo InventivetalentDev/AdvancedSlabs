@@ -30,6 +30,7 @@ package org.inventivetalent.advancedslabs.slab;
 
 import org.bukkit.scheduler.BukkitRunnable;
 import org.inventivetalent.advancedslabs.AdvancedSlabs;
+import org.inventivetalent.advancedslabs.api.IAdvancedSlab;
 
 import java.util.Iterator;
 
@@ -43,8 +44,8 @@ public class FallingBlockResetTask extends BukkitRunnable {
 
 	@Override
 	public void run() {
-		for (Iterator<AdvancedSlab> iterator = plugin.slabManager.slabs.iterator(); iterator.hasNext(); ) {
-			AdvancedSlab next = iterator.next();
+		for (Iterator<IAdvancedSlab> iterator = plugin.slabManager.slabs.iterator(); iterator.hasNext(); ) {
+			IAdvancedSlab next = iterator.next();
 			if (next == null) {
 				iterator.remove();
 				continue;

@@ -26,12 +26,26 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.advancedslabs.movement.path;
+package org.inventivetalent.advancedslabs.api;
 
-public interface PathPassenger {
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.entity.Entity;
+import org.inventivetalent.advancedslabs.api.path.ISlabPath;
 
-	int getPointIndex();
+import java.util.Set;
+import java.util.UUID;
 
-	void setPointIndex(int index);
+public interface ISlabManager {
+
+	IAdvancedSlab createSlab(Location location, Material material, byte data);
+
+	void removeSlab(IAdvancedSlab slab);
+
+	IAdvancedSlab getSlabForEntity(Entity entity);
+
+	IAdvancedSlab getSlabForUUID(UUID uuid);
+
+	Set<IAdvancedSlab> getSlabsForPath(ISlabPath path);
 
 }

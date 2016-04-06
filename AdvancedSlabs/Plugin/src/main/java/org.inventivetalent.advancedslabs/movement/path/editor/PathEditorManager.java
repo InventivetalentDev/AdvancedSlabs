@@ -30,8 +30,8 @@ package org.inventivetalent.advancedslabs.movement.path.editor;
 
 import org.bukkit.Location;
 import org.inventivetalent.advancedslabs.AdvancedSlabs;
-import org.inventivetalent.advancedslabs.movement.path.PathPoint;
-import org.inventivetalent.advancedslabs.movement.path.SlabPath;
+import org.inventivetalent.advancedslabs.api.path.IPathPoint;
+import org.inventivetalent.advancedslabs.api.path.ISlabPath;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,14 +53,14 @@ public class PathEditorManager {
 	public PathEditor getEditorForPathBlock(Location location) {
 		for (PathEditor editor : editorMap.values()) {
 			if (editor.path == null) { continue; }
-			for (PathPoint point : editor.path.points) {
+			for (IPathPoint point : editor.path.getPoints()) {
 				if (point.isAt(location)) { return editor; }
 			}
 		}
 		return null;
 	}
 
-	public PathEditor newEditor(UUID uuid, SlabPath path) {
+	public PathEditor newEditor(UUID uuid, ISlabPath path) {
 		removeEditor(uuid);
 
 		PathEditor editor = new PathEditor();

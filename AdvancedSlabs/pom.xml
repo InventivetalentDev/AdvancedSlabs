@@ -44,7 +44,7 @@
     <name>AdvancedSlabs</name>
 
     <properties>
-        <as.version>1.3.2</as.version>
+        <as.version>1.4.0</as.version>
     </properties>
 
     <build>

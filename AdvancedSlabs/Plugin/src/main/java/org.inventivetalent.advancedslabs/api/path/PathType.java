@@ -26,7 +26,7 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.advancedslabs.movement.path;
+package org.inventivetalent.advancedslabs.api.path;
 
 import org.inventivetalent.advancedslabs.AdvancedSlabs;
 import org.inventivetalent.advancedslabs.movement.MovementControllerAbstract;
@@ -38,19 +38,19 @@ public enum PathType {
 
 	CIRCULAR_SWITCH("editor.path.type.circular.switch.description") {
 		@Override
-		public MovementControllerAbstract newController(SlabPath path) {
+		public MovementControllerAbstract newController(ISlabPath path) {
 			return new CircularSwitchController(path);
 		}
 	},
 	REVERSE_SWITCH("editor.path.type.reverse.switch.description") {
 		@Override
-		public MovementControllerAbstract newController(SlabPath path) {
+		public MovementControllerAbstract newController(ISlabPath path) {
 			return new ReverseSwitchController(path);
 		}
 	},
 	REVERSE_TOGGLE("editor.path.type.reverse.toggle.description") {
 		@Override
-		public MovementControllerAbstract newController(SlabPath path) {
+		public MovementControllerAbstract newController(ISlabPath path) {
 			return new ReverseToggleController(path);
 		}
 	};
@@ -62,8 +62,8 @@ public enum PathType {
 	}
 
 	public String getFormattedDescription() {
-		String format = AdvancedSlabs.instance.messages.getMessage("editor.path.type.format");
-		if (format.isEmpty()) { return ""; }
+		String format = AdvancedSlabs.instance.messages.getMessage("editor.path.type.format", "%s", "%s");//Workaround to keep the format
+		if (format == null || format.isEmpty()) { return ""; }
 		return String.format(format, this.name(), AdvancedSlabs.instance.messages.getMessage(this.description));
 	}
 
@@ -81,7 +81,7 @@ public enum PathType {
 		return values()[values().length - 1];
 	}
 
-	public MovementControllerAbstract newController(SlabPath path) {
+	public MovementControllerAbstract newController(ISlabPath path) {
 		return null;
 	}
 }

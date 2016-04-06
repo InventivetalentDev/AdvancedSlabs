@@ -33,7 +33,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 import org.inventivetalent.advancedslabs.AdvancedSlabs;
-import org.inventivetalent.advancedslabs.slab.AdvancedSlab;
+import org.inventivetalent.advancedslabs.api.IAdvancedSlab;
 
 import java.util.UUID;
 
@@ -42,8 +42,8 @@ public class BlockEditor {
 	static final double MAX_STEPS = 1.0D;
 	static final double MIN_STEPS = 0.001953125D;
 
-	public UUID         player;
-	public AdvancedSlab slab;
+	public UUID          player;
+	public IAdvancedSlab slab;
 
 	public double steps = 0.0625;
 

@@ -34,22 +34,25 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.inventivetalent.advancedslabs.AdvancedSlabs;
-import org.inventivetalent.advancedslabs.movement.path.SlabPath;
+import org.inventivetalent.advancedslabs.api.IAdvancedSlab;
+import org.inventivetalent.advancedslabs.api.ISlabManager;
+import org.inventivetalent.advancedslabs.api.path.ISlabPath;
 
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.UUID;
 
-public class SlabManager {
+public class SlabManager implements ISlabManager {
 
 	private AdvancedSlabs plugin;
-	public final Set<AdvancedSlab> slabs = new HashSet<>();
+	public final Set<IAdvancedSlab> slabs = new HashSet<>();
 
 	public SlabManager(AdvancedSlabs plugin) {
 		this.plugin = plugin;
 	}
 
+	@Override
 	public AdvancedSlab createSlab(Location location, Material material, byte data) {
 		AdvancedSlab slab = new AdvancedSlab(location);
 		slab.setMaterial(material, data);
@@ -60,17 +63,20 @@ public class SlabManager {
 		return slab;
 	}
 
-	public void removeSlab(AdvancedSlab slab) {
+	@Override
+	public void removeSlab(IAdvancedSlab slab) {
 		slabs.remove(slab);
-		slab.despawn();
+		((AdvancedSlab) slab).despawn();
 	}
 
-	public AdvancedSlab getSlabForEntity(Entity entity) {
+	@Override
+	public IAdvancedSlab getSlabForEntity(Entity entity) {
 		return getSlabForUUID(entity.getUniqueId());
 	}
 
-	public AdvancedSlab getSlabForUUID(UUID uuid) {
-		for (AdvancedSlab slab : slabs) {
+	@Override
+	public IAdvancedSlab getSlabForUUID(UUID uuid) {
+		for (IAdvancedSlab slab : slabs) {
 			if (slab.getArmorStandUUID().equals(uuid) || slab.getShulkerUUID().equals(uuid) || slab.getFallingBlockUUID().equals(uuid)) {
 				return slab;
 			}
@@ -78,20 +84,11 @@ public class SlabManager {
 		return null;
 	}
 
-	@Deprecated
-	public AdvancedSlab getFirstSlabForPath(SlabPath path) {
-		for (AdvancedSlab slab : slabs) {
-			if (slab.path == path.id) {
-				return slab;
-			}
-		}
-		return null;
-	}
-
-	public Set<AdvancedSlab> getSlabsForPath(SlabPath path) {
-		Set<AdvancedSlab> slabs = new HashSet<>();
-		for (AdvancedSlab slab : this.slabs) {
-			if (slab.path == path.id) {
+	@Override
+	public Set<IAdvancedSlab> getSlabsForPath(ISlabPath path) {
+		Set<IAdvancedSlab> slabs = new HashSet<>();
+		for (IAdvancedSlab slab : this.slabs) {
+			if (slab.getPathId() == path.getId()) {
 				slabs.add(slab);
 			}
 		}
@@ -100,8 +97,8 @@ public class SlabManager {
 
 	public JsonArray toJson() {
 		JsonArray array = new JsonArray();
-		for (AdvancedSlab slab : slabs) {
-			array.add(slab.toJson());
+		for (IAdvancedSlab slab : slabs) {
+			array.add(((AdvancedSlab) slab).toJson());
 		}
 		return array;
 	}

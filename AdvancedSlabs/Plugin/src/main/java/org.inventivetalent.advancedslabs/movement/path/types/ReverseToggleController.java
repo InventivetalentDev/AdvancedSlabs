@@ -28,15 +28,15 @@
 
 package org.inventivetalent.advancedslabs.movement.path.types;
 
-import org.inventivetalent.advancedslabs.movement.path.SlabPath;
-import org.inventivetalent.advancedslabs.slab.AdvancedSlab;
+import org.inventivetalent.advancedslabs.api.IAdvancedSlab;
+import org.inventivetalent.advancedslabs.api.path.ISlabPath;
 
 public class ReverseToggleController extends ReverseSwitchController {
 
 	public boolean wasActive = false;
 	public boolean toggled   = false;
 
-	public ReverseToggleController(SlabPath path) {
+	public ReverseToggleController(ISlabPath path) {
 		super(path);
 	}
 
@@ -62,7 +62,7 @@ public class ReverseToggleController extends ReverseSwitchController {
 	}
 
 	@Override
-	public boolean isAtTarget(AdvancedSlab slab) {
+	public boolean isAtTarget(IAdvancedSlab slab) {
 		boolean atTarget = super.isAtTarget(slab);
 		if (atTarget) { toggled = false; }
 		return atTarget;

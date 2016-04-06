@@ -42,7 +42,7 @@ public enum EditAxis {
 
 	protected boolean negative = false;
 
-	private EditAxis() {
+	EditAxis() {
 	}
 
 	public boolean isNegative() {

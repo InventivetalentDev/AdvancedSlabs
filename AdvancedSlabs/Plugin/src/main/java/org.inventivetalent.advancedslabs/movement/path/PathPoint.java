@@ -32,8 +32,9 @@ import com.google.gson.JsonObject;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.inventivetalent.advancedslabs.api.path.IPathPoint;
 
-public class PathPoint {
+public class PathPoint implements IPathPoint {
 
 	public final double x;
 	public final double y;
@@ -59,22 +60,27 @@ public class PathPoint {
 		this.z = jsonObject.get("z").getAsDouble();
 	}
 
+	@Override
 	public double getX() {
 		return x;
 	}
 
+	@Override
 	public double getY() {
 		return y;
 	}
 
+	@Override
 	public double getZ() {
 		return z;
 	}
 
+	@Override
 	public Location getLocation(World world) {
 		return new Location(world, getX(), getY(), getZ());
 	}
 
+	@Override
 	public boolean isAt(Location other) {
 		return other.getBlock().getLocation().equals(getLocation(other.getWorld()).getBlock().getLocation());
 	}

@@ -37,8 +37,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.inventivetalent.advancedslabs.AdvancedSlabs;
+import org.inventivetalent.advancedslabs.api.IAdvancedSlab;
+import org.inventivetalent.advancedslabs.api.path.IPathPoint;
+import org.inventivetalent.advancedslabs.api.path.ISlabPath;
 import org.inventivetalent.advancedslabs.movement.path.PathPoint;
-import org.inventivetalent.advancedslabs.movement.path.SlabPath;
 import org.inventivetalent.advancedslabs.movement.path.editor.PathEditor;
 import org.inventivetalent.advancedslabs.slab.AdvancedSlab;
 import org.inventivetalent.itembuilder.ItemBuilder;
@@ -92,8 +94,8 @@ public class PathWand extends AdvancedSlabItem {
 						return;
 					}
 					PathEditor editor = AdvancedSlabs.instance.pathEditorManager.getEditor(event.getPlayer().getUniqueId());
-					PathPoint toRemove = null;
-					for (PathPoint point : editor.path.points) {
+					IPathPoint toRemove = null;
+					for (IPathPoint point : editor.path.getPoints()) {
 						if (point.isAt(event.getClickedBlock().getLocation())) {
 							toRemove = point;
 							break;
@@ -102,7 +104,7 @@ public class PathWand extends AdvancedSlabItem {
 					if (toRemove != null) {
 						editor.path.removePoint(toRemove);
 						event.getPlayer().sendMessage(AdvancedSlabs.instance.messages.getMessage("editor.path.point.removed"));
-						if (editor.path.points.size() <= 0) {
+						if (editor.path.getPoints().size() <= 0) {
 							event.getPlayer().sendMessage(AdvancedSlabs.instance.messages.getMessage("editor.path.empty"));
 						}
 					}
@@ -111,7 +113,7 @@ public class PathWand extends AdvancedSlabItem {
 				}
 			} else {//Not sneaking
 				if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {//Edit path
-					SlabPath path = AdvancedSlabs.instance.pathManager.getPathForBlock(event.getClickedBlock().getLocation());
+					ISlabPath path = AdvancedSlabs.instance.pathManager.getPathForBlock(event.getClickedBlock().getLocation());
 					if (path == null) {
 						event.getPlayer().sendMessage(AdvancedSlabs.instance.messages.getMessage("editor.path.error.notFound"));
 						return;
@@ -127,11 +129,11 @@ public class PathWand extends AdvancedSlabItem {
 
 	@Override
 	public void handleEntityInteract(PlayerInteractEntityEvent event) {
-		AdvancedSlab slab = AdvancedSlabs.instance.slabManager.getSlabForEntity(event.getRightClicked());
+		IAdvancedSlab slab = AdvancedSlabs.instance.slabManager.getSlabForEntity(event.getRightClicked());
 		if (slab != null) {
 			if (AdvancedSlabs.instance.pathEditorManager.isEditing(event.getPlayer().getUniqueId())) {
 				PathEditor pathEditor = AdvancedSlabs.instance.pathEditorManager.getEditor(event.getPlayer().getUniqueId());
-				slab.path = pathEditor.path.id;
+				((AdvancedSlab) slab).path = pathEditor.path.getId();
 				event.getPlayer().sendMessage(AdvancedSlabs.instance.messages.getMessage("editor.path.bound"));
 				event.setCancelled(true);
 			}
@@ -140,11 +142,11 @@ public class PathWand extends AdvancedSlabItem {
 
 	@Override
 	public void handleEntityDamage(EntityDamageByEntityEvent event) {
-		AdvancedSlab slab = AdvancedSlabs.instance.slabManager.getSlabForEntity(event.getEntity());
+		IAdvancedSlab slab = AdvancedSlabs.instance.slabManager.getSlabForEntity(event.getEntity());
 		if (slab != null) {
 			if (AdvancedSlabs.instance.pathEditorManager.isEditing(((Player) event.getDamager()).getUniqueId())) {
 				PathEditor pathEditor = AdvancedSlabs.instance.pathEditorManager.getEditor(((Player) event.getDamager()).getUniqueId());
-				slab.path = -1;
+				((AdvancedSlab) slab).path = -1;
 				((Player) event.getDamager()).sendMessage(AdvancedSlabs.instance.messages.getMessage("editor.path.unbound"));
 				event.setCancelled(true);
 			}

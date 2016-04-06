@@ -39,15 +39,16 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import org.inventivetalent.advancedslabs.AdvancedSlabs;
 import org.inventivetalent.advancedslabs.EntityHelper;
+import org.inventivetalent.advancedslabs.api.IAdvancedSlab;
 import org.inventivetalent.advancedslabs.entity.ISlabFallingBlock;
-import org.inventivetalent.advancedslabs.movement.path.PathPassenger;
+import org.inventivetalent.advancedslabs.api.path.IPathPassenger;
 import org.inventivetalent.reflection.minecraft.Minecraft;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
 import java.util.logging.Level;
 
-public class AdvancedSlab implements PathPassenger {
+public class AdvancedSlab implements IPathPassenger, IAdvancedSlab {
 
 	private final UUID     armorStandUUID;
 	private final UUID     shulkerUUID;
@@ -150,41 +151,50 @@ public class AdvancedSlab implements PathPassenger {
 		return AdvancedSlabs.instance.entityManager.spawnFallingBlock(location, material, data);
 	}
 
+	@Override
 	public MaterialData getMaterialData() {
 		return materialData;
 	}
 
+	@Override
 	public UUID getShulkerUUID() {
 		return shulkerUUID;
 	}
 
+	@Override
 	public UUID getArmorStandUUID() {
 		return armorStandUUID;
 	}
 
+	@Override
 	public UUID getFallingBlockUUID() {
 		return fallingBlockUUID;
 	}
 
+	@Override
 	@Nullable
 	public Shulker getShulker() {
 		return shulker;
 	}
 
+	@Override
 	@Nullable
 	public ArmorStand getArmorStand() {
 		return armorStand;
 	}
 
+	@Override
 	@Nullable
 	public ISlabFallingBlock getFallingBlock() {
 		return fallingBlock;
 	}
 
+	@Override
 	public Location getLocation() {
 		return location;
 	}
 
+	@Override
 	public void move(Location location) {
 		if (despawned) { return; }
 		location.setPitch(0);
@@ -197,6 +207,7 @@ public class AdvancedSlab implements PathPassenger {
 		//		reStackEntities();
 	}
 
+	@Override
 	public void moveRelative(Vector vector) {
 		move(this.location.clone().add(vector));
 	}
@@ -223,12 +234,14 @@ public class AdvancedSlab implements PathPassenger {
 		if (getArmorStand() != null) { getArmorStand().remove(); }
 	}
 
+	@Override
 	public void respawnFallingBlock() {
 		if (despawned) { return; }
 
 		setMaterial(getMaterialData().getItemType(), getMaterialData().getData());
 	}
 
+	@Override
 	public void refreshEntities() {
 		for (Entity entity : this.location.getWorld().getNearbyEntities(this.location, 8, 8, 8)) {
 			if (entity.getType() == EntityType.SHULKER) {
@@ -244,6 +257,16 @@ public class AdvancedSlab implements PathPassenger {
 	}
 
 	@Override
+	public boolean isDespawned() {
+		return despawned;
+	}
+
+	@Override
+	public int getPathId() {
+		return path;
+	}
+
+	@Override
 	public int getPointIndex() {
 		return pathPointIndex;
 	}
@@ -251,6 +274,16 @@ public class AdvancedSlab implements PathPassenger {
 	@Override
 	public void setPointIndex(int index) {
 		pathPointIndex = index;
+	}
+
+	@Override
+	public UUID getOwner() {
+		return owner;
+	}
+
+	@Override
+	public void setOwner(UUID owner) {
+		this.owner = owner;
 	}
 
 	public JsonObject toJson() {

@@ -26,56 +26,51 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.advancedslabs;
+package org.inventivetalent.advancedslabs.api;
 
-import org.bukkit.Bukkit;
-import org.inventivetalent.advancedslabs.api.IAdvancedSlab;
-import org.inventivetalent.packetlistener.handler.PacketHandler;
-import org.inventivetalent.packetlistener.handler.PacketOptions;
-import org.inventivetalent.packetlistener.handler.ReceivedPacket;
-import org.inventivetalent.packetlistener.handler.SentPacket;
+import org.bukkit.Location;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Shulker;
+import org.bukkit.material.MaterialData;
+import org.bukkit.util.Vector;
+import org.inventivetalent.advancedslabs.api.path.IPathPassenger;
+import org.inventivetalent.advancedslabs.entity.ISlabFallingBlock;
 
+import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class PacketListener {
+public interface IAdvancedSlab extends IPathPassenger {
 
-	private PacketHandler packetHandler;
+	MaterialData getMaterialData();
 
-	public PacketListener(AdvancedSlabs plugin) {
-		this.packetHandler = new PacketHandler(plugin) {
+	UUID getShulkerUUID();
 
-			@Override
-			@PacketOptions(forcePlayer = true)
-			public void onSend(SentPacket sentPacket) {
-				if ("PacketPlayOutSpawnEntityLiving".equals(sentPacket.getPacketName())) {
-					int c = (int) sentPacket.getPacketValue("c");
-					if (c == 69) {//Shulker
-						UUID b = (UUID) sentPacket.getPacketValue("b");
-						final IAdvancedSlab slab = AdvancedSlabs.instance.slabManager.getSlabForUUID(b);
-						if (slab != null) {
-							Bukkit.getScheduler().runTask(getPlugin(), new Runnable() {
-								@Override
-								public void run() {
-									slab.refreshEntities();
-									slab.respawnFallingBlock();
-								}
-							});
-						}
-					}
-				}
-			}
+	UUID getArmorStandUUID();
 
-			@Override
-			public void onReceive(ReceivedPacket receivedPacket) {
-			}
-		};
-		PacketHandler.addHandler(this.packetHandler);
-	}
+	UUID getFallingBlockUUID();
 
-	public void disable() {
-		if (this.packetHandler != null) {
-			PacketHandler.removeHandler(this.packetHandler);
-		}
-	}
+	@Nullable
+	Shulker getShulker();
 
+	@Nullable
+	ArmorStand getArmorStand();
+
+	@Nullable
+	ISlabFallingBlock getFallingBlock();
+
+	Location getLocation();
+
+	void move(Location location);
+
+	void moveRelative(Vector vector);
+
+	boolean isDespawned();
+
+	void refreshEntities();
+
+	void respawnFallingBlock();
+
+	UUID getOwner();
+
+	void setOwner(UUID uuid);
 }

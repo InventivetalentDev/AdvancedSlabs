@@ -40,7 +40,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.inventivetalent.advancedslabs.AdvancedSlabs;
-import org.inventivetalent.advancedslabs.slab.AdvancedSlab;
+import org.inventivetalent.advancedslabs.api.IAdvancedSlab;
 import org.inventivetalent.itembuilder.ItemBuilder;
 import org.inventivetalent.recipebuilder.ShapedRecipeBuilder;
 
@@ -82,7 +82,7 @@ public class EditorWand extends AdvancedSlabItem {
 		//Ignore the item when editing
 		if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
 			if (AdvancedSlabs.instance.editorManager.isEditing(event.getPlayer().getUniqueId())) {
-				AdvancedSlab slab = AdvancedSlabs.instance.editorManager.getEditor(event.getPlayer().getUniqueId()).slab;
+				IAdvancedSlab slab = AdvancedSlabs.instance.editorManager.getEditor(event.getPlayer().getUniqueId()).slab;
 
 				AdvancedSlabs.instance.editorManager.removeEditor(event.getPlayer().getUniqueId());
 				event.getPlayer().sendMessage(AdvancedSlabs.instance.messages.getMessage("editor.finished"));
@@ -109,7 +109,6 @@ public class EditorWand extends AdvancedSlabItem {
 						}
 					}
 				}
-				return;
 			}
 		}
 	}
@@ -142,10 +141,10 @@ public class EditorWand extends AdvancedSlabItem {
 
 	@Override
 	public void handleEntityInteract(PlayerInteractEntityEvent event) {
-		final AdvancedSlab slab = AdvancedSlabs.instance.slabManager.getSlabForEntity(event.getRightClicked());
+		final IAdvancedSlab slab = AdvancedSlabs.instance.slabManager.getSlabForEntity(event.getRightClicked());
 		if (slab != null) {
 			if (AdvancedSlabs.instance.getConfig().getBoolean("slabOwners")) {
-				if (slab.owner != null && !slab.owner.equals(event.getPlayer().getUniqueId()) && !event.getPlayer().hasPermission("advancedslabs.editall")) {
+				if (slab.getOwner() != null && !slab.getOwner().equals(event.getPlayer().getUniqueId()) && !event.getPlayer().hasPermission("advancedslabs.editall")) {
 					event.getPlayer().sendMessage(AdvancedSlabs.instance.messages.getMessage("editor.error.noPermission"));
 					return;
 				}

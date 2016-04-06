@@ -29,25 +29,25 @@
 package org.inventivetalent.advancedslabs.movement.path.types;
 
 import org.bukkit.util.Vector;
+import org.inventivetalent.advancedslabs.api.IAdvancedSlab;
+import org.inventivetalent.advancedslabs.api.path.IPathPassenger;
+import org.inventivetalent.advancedslabs.api.path.IPathPoint;
+import org.inventivetalent.advancedslabs.api.path.ISlabPath;
 import org.inventivetalent.advancedslabs.movement.MovementControllerAbstract;
-import org.inventivetalent.advancedslabs.movement.path.PathPassenger;
-import org.inventivetalent.advancedslabs.movement.path.PathPoint;
-import org.inventivetalent.advancedslabs.movement.path.SlabPath;
-import org.inventivetalent.advancedslabs.slab.AdvancedSlab;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class ReverseSwitchController extends MovementControllerAbstract {
 
-	Map<PathPassenger, Integer> directionMap = new HashMap<>();
+	Map<IPathPassenger, Integer> directionMap = new HashMap<>();
 
-	public ReverseSwitchController(SlabPath path) {
+	public ReverseSwitchController(ISlabPath path) {
 		super(path);
 	}
 
 	@Override
-	public PathPoint getNext(PathPassenger pathPassenger) {
+	public IPathPoint getNext(IPathPassenger pathPassenger) {
 		int direction = getUpdatedDirection(pathPassenger);
 		if (direction == 1) {
 			return path.getPoint(pathPassenger.getPointIndex() + 1);
@@ -57,7 +57,7 @@ public class ReverseSwitchController extends MovementControllerAbstract {
 	}
 
 	@Override
-	public PathPoint goToNext(PathPassenger pathPassenger) {
+	public IPathPoint goToNext(IPathPassenger pathPassenger) {
 		updateDirection(pathPassenger);
 		if (getDirection(pathPassenger) == 1) {
 			pathPassenger.setPointIndex(pathPassenger.getPointIndex() + 1);
@@ -69,7 +69,7 @@ public class ReverseSwitchController extends MovementControllerAbstract {
 	}
 
 	@Override
-	public PathPoint getPrevious(PathPassenger pathPassenger) {
+	public IPathPoint getPrevious(IPathPassenger pathPassenger) {
 		int direction = getUpdatedDirection(pathPassenger);
 		if (direction == 1) {
 			return path.getPoint(pathPassenger.getPointIndex() - 1);
@@ -79,7 +79,7 @@ public class ReverseSwitchController extends MovementControllerAbstract {
 	}
 
 	@Override
-	public PathPoint goToPrevious(PathPassenger pathPassenger) {
+	public IPathPoint goToPrevious(IPathPassenger pathPassenger) {
 		updateDirection(pathPassenger);
 		if (getDirection(pathPassenger) == 1) {
 			pathPassenger.setPointIndex(pathPassenger.getPointIndex() - 1);
@@ -90,20 +90,20 @@ public class ReverseSwitchController extends MovementControllerAbstract {
 		}
 	}
 
-	int getDirection(PathPassenger pathPassenger) {
+	int getDirection(IPathPassenger pathPassenger) {
 		if (directionMap.containsKey(pathPassenger)) {
 			return directionMap.get(pathPassenger);
 		}
 		return 1;
 	}
 
-	void updateDirection(PathPassenger pathPassenger) {
+	void updateDirection(IPathPassenger pathPassenger) {
 		int direction = getUpdatedDirection(pathPassenger);
 		directionMap.put(pathPassenger, direction);
 		//					pathPassenger.setPointIndex(direction);
 	}
 
-	int getUpdatedDirection(PathPassenger pathPassenger) {
+	int getUpdatedDirection(IPathPassenger pathPassenger) {
 		if (pathPassenger.getPointIndex() == path.length() - 1) {//We're at the end
 			return 0;
 		} else if (pathPassenger.getPointIndex() == 0) {//We're at the start
@@ -113,7 +113,7 @@ public class ReverseSwitchController extends MovementControllerAbstract {
 	}
 
 	@Override
-	public void move(AdvancedSlab slab) {
+	public void move(IAdvancedSlab slab) {
 		if (isAtTarget(slab)) {
 			goToNext(slab);
 		}

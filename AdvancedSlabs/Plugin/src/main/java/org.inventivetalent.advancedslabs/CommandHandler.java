@@ -38,11 +38,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.inventivetalent.advancedslabs.api.IAdvancedSlab;
+import org.inventivetalent.advancedslabs.api.path.ISlabPath;
 import org.inventivetalent.advancedslabs.editor.EditorManager;
 import org.inventivetalent.advancedslabs.item.ItemManager;
-import org.inventivetalent.advancedslabs.movement.path.SlabPath;
 import org.inventivetalent.advancedslabs.movement.path.editor.PathEditor;
-import org.inventivetalent.advancedslabs.slab.AdvancedSlab;
 import org.inventivetalent.glow.GlowAPI;
 import org.inventivetalent.itembuilder.ItemBuilder;
 
@@ -98,7 +98,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 			if (sender.hasPermission("advancedslabs.highlight")) {
 				if (sender instanceof Player) {
 					for (Entity entity : ((Player) sender).getNearbyEntities(16, 16, 16)) {
-						AdvancedSlab slab = plugin.slabManager.getSlabForEntity(entity);
+						IAdvancedSlab slab = plugin.slabManager.getSlabForEntity(entity);
 						if (slab != null) {
 							if (highlightedPlayers.contains(((Player) sender).getUniqueId())) {
 								GlowAPI.setGlowing(slab.getShulker(), false, (Player) sender);
@@ -122,7 +122,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 			if (sender.hasPermission("advancedslabs.respawn")) {
 				if (sender instanceof Player) {
 					for (Entity entity : ((Player) sender).getNearbyEntities(16, 16, 16)) {
-						AdvancedSlab slab = plugin.slabManager.getSlabForEntity(entity);
+						IAdvancedSlab slab = plugin.slabManager.getSlabForEntity(entity);
 						if (slab != null) {
 							slab.refreshEntities();
 							slab.respawnFallingBlock();
@@ -210,11 +210,11 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 						sender.sendMessage("§cPlease specify the speed");
 						return false;
 					}
-					SlabPath path = plugin.pathEditorManager.getEditor(((Player) sender).getUniqueId()).path;
+					ISlabPath path = plugin.pathEditorManager.getEditor(((Player) sender).getUniqueId()).path;
 					try {
 						double speed = Double.parseDouble(args[1]);
 						if (speed > PathEditor.MIN_SPEED && speed < PathEditor.MAX_SPEED) {
-							path.speed = speed;
+							path.setSpeed(speed);
 							sender.sendMessage("§aSpeed changed to " + speed);
 						} else {
 							sender.sendMessage("§cSpecified number is too small or too big");

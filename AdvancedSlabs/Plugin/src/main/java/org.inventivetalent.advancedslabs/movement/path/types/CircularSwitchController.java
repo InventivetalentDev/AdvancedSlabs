@@ -29,20 +29,20 @@
 package org.inventivetalent.advancedslabs.movement.path.types;
 
 import org.bukkit.util.Vector;
+import org.inventivetalent.advancedslabs.api.IAdvancedSlab;
+import org.inventivetalent.advancedslabs.api.path.IPathPassenger;
+import org.inventivetalent.advancedslabs.api.path.IPathPoint;
+import org.inventivetalent.advancedslabs.api.path.ISlabPath;
 import org.inventivetalent.advancedslabs.movement.MovementControllerAbstract;
-import org.inventivetalent.advancedslabs.movement.path.PathPassenger;
-import org.inventivetalent.advancedslabs.movement.path.PathPoint;
-import org.inventivetalent.advancedslabs.movement.path.SlabPath;
-import org.inventivetalent.advancedslabs.slab.AdvancedSlab;
 
 public class CircularSwitchController extends MovementControllerAbstract {
 
-	public CircularSwitchController(SlabPath path) {
+	public CircularSwitchController(ISlabPath path) {
 		super(path);
 	}
 
 	@Override
-	public PathPoint getNext(PathPassenger pathPassenger) {
+	public IPathPoint getNext(IPathPassenger pathPassenger) {
 		if (pathPassenger.getPointIndex() < path.length() - 1) {
 			return path.getPoint(pathPassenger.getPointIndex() + 1);
 		} else {
@@ -51,7 +51,7 @@ public class CircularSwitchController extends MovementControllerAbstract {
 	}
 
 	@Override
-	public PathPoint goToNext(PathPassenger pathPassenger) {
+	public IPathPoint goToNext(IPathPassenger pathPassenger) {
 		if (pathPassenger.getPointIndex() < path.length() - 1) {
 			pathPassenger.setPointIndex(pathPassenger.getPointIndex() + 1);
 			return path.getPoint(pathPassenger.getPointIndex());
@@ -62,7 +62,7 @@ public class CircularSwitchController extends MovementControllerAbstract {
 	}
 
 	@Override
-	public PathPoint getPrevious(PathPassenger pathPassenger) {
+	public IPathPoint getPrevious(IPathPassenger pathPassenger) {
 		if (pathPassenger.getPointIndex() > 0) {
 			return path.getPoint(pathPassenger.getPointIndex() - 1);
 		} else {
@@ -71,7 +71,7 @@ public class CircularSwitchController extends MovementControllerAbstract {
 	}
 
 	@Override
-	public PathPoint goToPrevious(PathPassenger pathPassenger) {
+	public IPathPoint goToPrevious(IPathPassenger pathPassenger) {
 		if (pathPassenger.getPointIndex() > 0) {
 			pathPassenger.setPointIndex(pathPassenger.getPointIndex() - 1);
 			return path.getPoint(pathPassenger.getPointIndex());
@@ -82,7 +82,7 @@ public class CircularSwitchController extends MovementControllerAbstract {
 	}
 
 	@Override
-	public void move(AdvancedSlab slab) {
+	public void move(IAdvancedSlab slab) {
 		if (isAtTarget(slab)) {
 			goToNext(slab);
 		}

@@ -26,56 +26,17 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.advancedslabs;
+package org.inventivetalent.advancedslabs.api.path;
 
-import org.bukkit.Bukkit;
-import org.inventivetalent.advancedslabs.api.IAdvancedSlab;
-import org.inventivetalent.packetlistener.handler.PacketHandler;
-import org.inventivetalent.packetlistener.handler.PacketOptions;
-import org.inventivetalent.packetlistener.handler.ReceivedPacket;
-import org.inventivetalent.packetlistener.handler.SentPacket;
+import org.bukkit.Location;
+import org.bukkit.World;
 
-import java.util.UUID;
+public interface IPathManager {
 
-public class PacketListener {
+	ISlabPath newPath(World world);
 
-	private PacketHandler packetHandler;
+	ISlabPath getPathForBlock(Location location);
 
-	public PacketListener(AdvancedSlabs plugin) {
-		this.packetHandler = new PacketHandler(plugin) {
-
-			@Override
-			@PacketOptions(forcePlayer = true)
-			public void onSend(SentPacket sentPacket) {
-				if ("PacketPlayOutSpawnEntityLiving".equals(sentPacket.getPacketName())) {
-					int c = (int) sentPacket.getPacketValue("c");
-					if (c == 69) {//Shulker
-						UUID b = (UUID) sentPacket.getPacketValue("b");
-						final IAdvancedSlab slab = AdvancedSlabs.instance.slabManager.getSlabForUUID(b);
-						if (slab != null) {
-							Bukkit.getScheduler().runTask(getPlugin(), new Runnable() {
-								@Override
-								public void run() {
-									slab.refreshEntities();
-									slab.respawnFallingBlock();
-								}
-							});
-						}
-					}
-				}
-			}
-
-			@Override
-			public void onReceive(ReceivedPacket receivedPacket) {
-			}
-		};
-		PacketHandler.addHandler(this.packetHandler);
-	}
-
-	public void disable() {
-		if (this.packetHandler != null) {
-			PacketHandler.removeHandler(this.packetHandler);
-		}
-	}
+	ISlabPath getPathById(int id);
 
 }
