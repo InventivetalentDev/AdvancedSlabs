@@ -53,13 +53,13 @@ public class PacketListener {
 						UUID b = (UUID) sentPacket.getPacketValue("b");
 						final IAdvancedSlab slab = AdvancedSlabs.instance.slabManager.getSlabForUUID(b);
 						if (slab != null) {
-							Bukkit.getScheduler().runTask(getPlugin(), new Runnable() {
+							Bukkit.getScheduler().runTaskLater(getPlugin(), new Runnable() {
 								@Override
 								public void run() {
 									slab.refreshEntities();
 									slab.respawnFallingBlock();
 								}
-							});
+							}, 10);
 						}
 					}
 				}
