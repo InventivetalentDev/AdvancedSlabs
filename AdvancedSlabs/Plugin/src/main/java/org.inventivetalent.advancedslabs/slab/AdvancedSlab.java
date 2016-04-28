@@ -40,8 +40,8 @@ import org.bukkit.util.Vector;
 import org.inventivetalent.advancedslabs.AdvancedSlabs;
 import org.inventivetalent.advancedslabs.EntityHelper;
 import org.inventivetalent.advancedslabs.api.IAdvancedSlab;
-import org.inventivetalent.advancedslabs.entity.ISlabFallingBlock;
 import org.inventivetalent.advancedslabs.api.path.IPathPassenger;
+import org.inventivetalent.advancedslabs.entity.ISlabFallingBlock;
 import org.inventivetalent.reflection.minecraft.Minecraft;
 
 import javax.annotation.Nullable;
@@ -243,7 +243,7 @@ public class AdvancedSlab implements IPathPassenger, IAdvancedSlab {
 
 	@Override
 	public void refreshEntities() {
-		for (Entity entity : this.location.getWorld().getNearbyEntities(this.location, 8, 8, 8)) {
+		for (Entity entity : this.location.getWorld()/*.getNearbyEntities(this.location, 8, 8, 8)*/.getEntitiesByClasses(Shulker.class, ArmorStand.class, FallingBlock.class, ISlabFallingBlock.class)) {
 			if (entity.getType() == EntityType.SHULKER) {
 				if (entity.getUniqueId().equals(this.shulkerUUID)) {this.shulker = (Shulker) entity;}
 			}
