@@ -91,6 +91,7 @@
                                     <include>org.inventivetalent.packetlistener**</include>
                                     <include>org.inventivetalent:glowapi**</include>
                                     <include>org.inventivetalent:particleapi**</include>
+                                    <include>org.inventivetalent:boundingboxapi**</include>
 
                                     <include>org.inventivetalent.advancedslabs:**</include>
                                 </includes>
@@ -190,6 +191,11 @@
             <groupId>org.inventivetalent</groupId>
             <artifactId>particleapi</artifactId>
             <version>[2.0.0,)</version>
+        </dependency>
+        <dependency>
+            <groupId>org.inventivetalent</groupId>
+            <artifactId>boundingboxapi</artifactId>
+            <version>[1.1.0,)</version>
         </dependency>
     </dependencies>
 

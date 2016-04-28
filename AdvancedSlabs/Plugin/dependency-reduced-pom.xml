@@ -57,6 +57,7 @@
                   <include>org.inventivetalent.packetlistener**</include>
                   <include>org.inventivetalent:glowapi**</include>
                   <include>org.inventivetalent:particleapi**</include>
+                  <include>org.inventivetalent:boundingboxapi**</include>
                   <include>org.inventivetalent.advancedslabs:**</include>
                 </includes>
               </artifactSet>
