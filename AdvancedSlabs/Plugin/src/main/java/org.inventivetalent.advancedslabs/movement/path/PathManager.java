@@ -92,4 +92,8 @@ public class PathManager implements IPathManager {
 		}
 	}
 
+	public int size() {
+		return paths.size();
+	}
+
 }

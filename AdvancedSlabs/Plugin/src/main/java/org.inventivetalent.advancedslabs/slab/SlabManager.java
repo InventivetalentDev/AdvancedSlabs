@@ -121,4 +121,9 @@ public class SlabManager implements ISlabManager {
 	public Set<IAdvancedSlab> getSlabs() {
 		return new HashSet<>(slabs);
 	}
+
+	@Synchronized
+	public int size() {
+		return slabs.size();
+	}
 }

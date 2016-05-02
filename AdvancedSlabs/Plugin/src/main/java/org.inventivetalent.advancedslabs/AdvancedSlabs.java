@@ -104,7 +104,7 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 
 	SpigetUpdate spigetUpdate;
 
-	protected AdvancedSlabsAPI api=new AdvancedSlabsAPI() {
+	protected AdvancedSlabsAPI api = new AdvancedSlabsAPI() {
 		@Override
 		public ISlabManager getSlabManager() {
 			return slabManager;
@@ -336,13 +336,17 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 	}
 
 	public void saveSlabs() {
-		JsonArray slabArray = slabManager.toJson();
-		writeJson(slabArray, slabFile);
+		if (slabManager.size() > 0) {
+			JsonArray slabArray = slabManager.toJson();
+			writeJson(slabArray, slabFile);
+		}
 	}
 
 	public void savePaths() {
-		JsonArray pathArray = pathManager.toJson();
-		writeJson(pathArray, pathFile);
+		if (pathManager.size() > 0) {
+			JsonArray pathArray = pathManager.toJson();
+			writeJson(pathArray, pathFile);
+		}
 	}
 
 	public void loadSlabs() {
