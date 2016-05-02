@@ -30,6 +30,7 @@ package org.inventivetalent.advancedslabs.slab;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import lombok.Synchronized;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -46,12 +47,13 @@ import java.util.UUID;
 public class SlabManager implements ISlabManager {
 
 	private AdvancedSlabs plugin;
-	public final Set<IAdvancedSlab> slabs = new HashSet<>();
+	private final Set<IAdvancedSlab> slabs = new HashSet<>();
 
 	public SlabManager(AdvancedSlabs plugin) {
 		this.plugin = plugin;
 	}
 
+	@Synchronized
 	@Override
 	public AdvancedSlab createSlab(Location location, Material material, byte data) {
 		AdvancedSlab slab = new AdvancedSlab(location);
@@ -63,6 +65,7 @@ public class SlabManager implements ISlabManager {
 		return slab;
 	}
 
+	@Synchronized
 	@Override
 	public void removeSlab(IAdvancedSlab slab) {
 		slabs.remove(slab);
@@ -74,6 +77,7 @@ public class SlabManager implements ISlabManager {
 		return getSlabForUUID(entity.getUniqueId());
 	}
 
+	@Synchronized
 	@Override
 	public IAdvancedSlab getSlabForUUID(UUID uuid) {
 		for (IAdvancedSlab slab : slabs) {
@@ -84,6 +88,7 @@ public class SlabManager implements ISlabManager {
 		return null;
 	}
 
+	@Synchronized
 	@Override
 	public Set<IAdvancedSlab> getSlabsForPath(ISlabPath path) {
 		Set<IAdvancedSlab> slabs = new HashSet<>();
@@ -95,6 +100,7 @@ public class SlabManager implements ISlabManager {
 		return slabs;
 	}
 
+	@Synchronized
 	public JsonArray toJson() {
 		JsonArray array = new JsonArray();
 		for (IAdvancedSlab slab : slabs) {
@@ -103,6 +109,7 @@ public class SlabManager implements ISlabManager {
 		return array;
 	}
 
+	@Synchronized
 	public void loadJson(JsonArray jsonArray) {
 		for (Iterator<JsonElement> iterator = jsonArray.iterator(); iterator.hasNext(); ) {
 			JsonElement next = iterator.next();
@@ -110,4 +117,8 @@ public class SlabManager implements ISlabManager {
 		}
 	}
 
+	@Synchronized
+	public Set<IAdvancedSlab> getSlabs() {
+		return new HashSet<>(slabs);
+	}
 }

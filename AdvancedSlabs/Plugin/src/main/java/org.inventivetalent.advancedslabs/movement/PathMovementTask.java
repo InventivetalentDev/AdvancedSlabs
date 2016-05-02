@@ -46,7 +46,7 @@ public class PathMovementTask extends BukkitRunnable {
 	@Override
 	public void run() {
 		if (Bukkit.getOnlinePlayers().isEmpty()) { return; }
-		for (IAdvancedSlab slab : plugin.slabManager.slabs) {
+		for (IAdvancedSlab slab : plugin.slabManager.getSlabs()) {
 			if (slab.getPathId() == -1) { continue; }
 			ISlabPath path = plugin.pathManager.getPathById(slab.getPathId());
 			if (path != null) {
