@@ -197,6 +197,11 @@
             <artifactId>boundingboxapi</artifactId>
             <version>[1.2.0,)</version>
         </dependency>
+        <dependency>
+            <groupId>org.inventivetalent.spiget-update</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>[1.0.1,)</version>
+        </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>

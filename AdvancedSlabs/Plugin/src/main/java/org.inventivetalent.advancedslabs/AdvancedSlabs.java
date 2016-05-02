@@ -67,6 +67,8 @@ import org.inventivetalent.glow.GlowAPI;
 import org.inventivetalent.messagebuilder.MessageBuilder;
 import org.inventivetalent.messagebuilder.MessageContainer;
 import org.inventivetalent.packetlistener.PacketListenerAPI;
+import org.inventivetalent.update.spiget.SpigetUpdate;
+import org.inventivetalent.update.spiget.UpdateCallback;
 import org.mcstats.MetricsLite;
 
 import java.io.BufferedWriter;
@@ -100,6 +102,7 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 
 	public boolean spawningSlab = false;
 
+	SpigetUpdate spigetUpdate;
 
 	protected AdvancedSlabsAPI api=new AdvancedSlabsAPI() {
 		@Override
@@ -208,8 +211,22 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 		try {
 			MetricsLite metrics = new MetricsLite(this);
 			if (metrics.start()) {
-				getLogger().info("Metrics started.");
+				getLogger().info("Metrics started");
 			}
+
+			spigetUpdate = new SpigetUpdate(this, 20164).setUserAgent("AnimatedFrames/" + getDescription().getVersion());
+			spigetUpdate.checkForUpdate(new UpdateCallback() {
+				@Override
+				public void updateAvailable(String s, String s1, boolean b) {
+					getLogger().info("A new version is available (" + s + "). Download it from https://r.spiget.org/20164");
+					getLogger().info("(If the above version is lower than the installed version, you are probably up-to-date)");
+				}
+
+				@Override
+				public void upToDate() {
+					getLogger().info("The plugin is up-to-date.");
+				}
+			});
 		} catch (Exception e) {
 		}
 	}
