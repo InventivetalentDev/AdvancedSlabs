@@ -60,7 +60,7 @@ public class EntityHelper {
 
 	public static void setNoAI(Object entity) {
 		try {
-			EntityInsentientMethodResolver.resolve(new ResolverQuery("m", boolean.class)).invoke(Minecraft.getHandle(entity), true);
+			EntityInsentientMethodResolver.resolve(new ResolverQuery("m", boolean.class),new ResolverQuery("setAI",boolean.class)).invoke(Minecraft.getHandle(entity), true);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -68,7 +68,7 @@ public class EntityHelper {
 
 	public static void setInvulnerable(Object entity) {
 		try {
-			EntityMethodResolver.resolve(new ResolverQuery("h", boolean.class)).invoke(Minecraft.getHandle(entity), true);
+			EntityMethodResolver.resolve(new ResolverQuery("h", boolean.class), new ResolverQuery("setInvulnerable", boolean.class)).invoke(Minecraft.getHandle(entity), true);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
