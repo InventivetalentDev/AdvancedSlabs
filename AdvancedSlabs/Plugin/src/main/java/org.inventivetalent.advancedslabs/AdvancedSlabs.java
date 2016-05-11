@@ -44,6 +44,7 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Team;
@@ -69,6 +70,7 @@ import org.inventivetalent.messagebuilder.MessageContainer;
 import org.inventivetalent.packetlistener.PacketListenerAPI;
 import org.inventivetalent.update.spiget.SpigetUpdate;
 import org.inventivetalent.update.spiget.UpdateCallback;
+import org.inventivetalent.update.spiget.comparator.VersionComparator;
 import org.mcstats.MetricsLite;
 
 import java.io.BufferedWriter;
@@ -214,12 +216,11 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 				getLogger().info("Metrics started");
 			}
 
-			spigetUpdate = new SpigetUpdate(this, 20164).setUserAgent("AnimatedFrames/" + getDescription().getVersion());
+			spigetUpdate = new SpigetUpdate(this, 20164).setUserAgent("AdvancedSlabs/" + getDescription().getVersion()).setVersionComparator(VersionComparator.SEM_VER);
 			spigetUpdate.checkForUpdate(new UpdateCallback() {
 				@Override
 				public void updateAvailable(String s, String s1, boolean b) {
 					getLogger().info("A new version is available (" + s + "). Download it from https://r.spiget.org/20164");
-					getLogger().info("(If the above version is lower than the installed version, you are probably up-to-date)");
 				}
 
 				@Override
@@ -288,6 +289,22 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 			if (editor != null) {
 				editor.handleDrop(event);
 			}
+		}
+	}
+
+	@EventHandler
+	public void on(final PlayerJoinEvent event) {
+		if (event.getPlayer().hasPermission("advancedslabs.updatecheck")) {
+			spigetUpdate.checkForUpdate(new UpdateCallback() {
+				@Override
+				public void updateAvailable(String s, String s1, boolean b) {
+					event.getPlayer().sendMessage("§aA new version for §6AdvancedSlabs §ais available (§7v" + s + "§a). Download it from https://r.spiget.org/20164");
+				}
+
+				@Override
+				public void upToDate() {
+				}
+			});
 		}
 	}
 
