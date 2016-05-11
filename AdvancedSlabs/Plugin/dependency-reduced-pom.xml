@@ -67,6 +67,10 @@
                   <pattern>org.mcstats</pattern>
                   <shadedPattern>org.inventivetalent.advancedslabs.mcstats</shadedPattern>
                 </relocation>
+                <relocation>
+                  <pattern>org.inventivetalent.reflection</pattern>
+                  <shadedPattern>org.inventivetalent.advancedslabs.reflection</shadedPattern>
+                </relocation>
               </relocations>
             </configuration>
           </execution>
