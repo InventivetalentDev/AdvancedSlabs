@@ -39,12 +39,13 @@
     <modules>
         <module>API</module>
         <module>v1_9_R1</module>
+        <module>v1_9_R2</module>
         <module>Plugin</module>
     </modules>
     <name>AdvancedSlabs</name>
 
     <properties>
-        <as.version>1.4.1</as.version>
+        <as.version>1.5.0</as.version>
     </properties>
 
     <build>
