@@ -76,6 +76,9 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 			if (sender.hasPermission("advancedslabs.give")) {
 				sender.sendMessage("§a/aslab give <Material>[:Data] [Player]");
 			}
+			if (sender.hasPermission("advancedslabs.save")) {
+				sender.sendMessage("§a/aslab save");
+			}
 			return true;
 		}
 		if ("wand".equalsIgnoreCase(args[0])) {
@@ -226,6 +229,16 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 					}
 
 				}
+			}
+		}
+		if ("save".equalsIgnoreCase(args[0])) {
+			if (sender.hasPermission("advancedslabs.save")) {
+				sender.sendMessage("§eSaving Slabs...");
+				plugin.saveSlabs();
+				sender.sendMessage("§eSaving Paths...");
+				plugin.savePaths();
+				
+				sender.sendMessage("§aDone!");
 			}
 		}
 
