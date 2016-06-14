@@ -237,7 +237,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 				plugin.saveSlabs();
 				sender.sendMessage("§eSaving Paths...");
 				plugin.savePaths();
-				
+
 				sender.sendMessage("§aDone!");
 			}
 		}
