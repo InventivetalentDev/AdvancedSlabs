@@ -52,6 +52,11 @@ public class EntityManager {
 		EntitySpawnerClass = classResolver.resolveSilent("org.inventivetalent.advancedslabs.entity.EntitySpawner_" + Minecraft.VERSION.name());
 		FallingBlockClass = classResolver.resolveSilent("org.inventivetalent.advancedslabs.entity.SlabEntityFallingSand_" + Minecraft.VERSION.name());
 
+		if (EntitySpawnerClass == null) {
+			plugin.getLogger().severe("This plugin is currently not compatible with this server version (" + Minecraft.VERSION.name() + ")");
+			throw new RuntimeException("Incompatible Server Version");
+		}
+
 		try {
 			this.spawner = (IEntitySpawner) EntitySpawnerClass.newInstance();
 		} catch (ReflectiveOperationException e) {
