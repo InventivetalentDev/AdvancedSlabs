@@ -41,6 +41,7 @@
         <module>v1_9_R1</module>
         <module>v1_9_R2</module>
         <module>Plugin</module>
+        <module>v1_10_R1</module>
     </modules>
     <name>AdvancedSlabs</name>
 
