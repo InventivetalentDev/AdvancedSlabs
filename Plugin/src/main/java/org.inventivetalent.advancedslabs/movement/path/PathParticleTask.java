@@ -31,14 +31,13 @@ package org.inventivetalent.advancedslabs.movement.path;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.inventivetalent.advancedslabs.AdvancedSlabs;
 import org.inventivetalent.advancedslabs.api.path.IPathPoint;
 import org.inventivetalent.advancedslabs.movement.path.editor.PathEditor;
-import org.inventivetalent.particle.ParticleEffect;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -61,32 +60,40 @@ public class PathParticleTask extends BukkitRunnable {
 			if (editor.path == null) { continue; }
 			for (int i = 0; i < editor.path.length(); i++) {
 				IPathPoint point = editor.path.getPoint(i);
-				Color color = i == 0 ? Color.LIME : i == editor.path.length()- 1 ? Color.RED : Color.BLUE;
+				Color color = i == 0 ? Color.LIME : i == editor.path.length() - 1 ? Color.RED : Color.BLUE;
 
 				//Center
-				ParticleEffect.REDSTONE.sendColor(Collections.singleton(editor.getPlayer()), point.getX(), point.getY() + .5, point.getZ(), color);
+				editor.getPlayer().spawnParticle(Particle.REDSTONE, point.getX(), point.getY() + .5, point.getZ(), 0, particleColor(color.getRed()), particleColor(color.getGreen()), particleColor(color.getBlue()), 1);
 
 				//Outline
-				ParticleEffect.REDSTONE.sendColor(Collections.singleton(editor.getPlayer()), point.getX() - .5, point.getY(), point.getZ() - .5, color);
-				ParticleEffect.REDSTONE.sendColor(Collections.singleton(editor.getPlayer()), point.getX() - .5, point.getY(), point.getZ() + .5, color);
-				ParticleEffect.REDSTONE.sendColor(Collections.singleton(editor.getPlayer()), point.getX() + .5, point.getY(), point.getZ() - .5, color);
-				ParticleEffect.REDSTONE.sendColor(Collections.singleton(editor.getPlayer()), point.getX() + .5, point.getY(), point.getZ() + .5, color);
-				ParticleEffect.REDSTONE.sendColor(Collections.singleton(editor.getPlayer()), point.getX() - .5, point.getY() + 1, point.getZ() - .5, color);
-				ParticleEffect.REDSTONE.sendColor(Collections.singleton(editor.getPlayer()), point.getX() - .5, point.getY() + 1, point.getZ() + .5, color);
-				ParticleEffect.REDSTONE.sendColor(Collections.singleton(editor.getPlayer()), point.getX() + .5, point.getY() + 1, point.getZ() - .5, color);
-				ParticleEffect.REDSTONE.sendColor(Collections.singleton(editor.getPlayer()), point.getX() + .5, point.getY() + 1, point.getZ() + .5, color);
+				editor.getPlayer().spawnParticle(Particle.REDSTONE, point.getX() - .5, point.getY(), point.getZ() - .5, 0, particleColor(color.getRed()), particleColor(color.getGreen()), particleColor(color.getBlue()), 1);
+				editor.getPlayer().spawnParticle(Particle.REDSTONE, point.getX() - .5, point.getY(), point.getZ() + .5, 0, particleColor(color.getRed()), particleColor(color.getGreen()), particleColor(color.getBlue()), 1);
+				editor.getPlayer().spawnParticle(Particle.REDSTONE, point.getX() + .5, point.getY(), point.getZ() - .5, 0, particleColor(color.getRed()), particleColor(color.getGreen()), particleColor(color.getBlue()), 1);
+				editor.getPlayer().spawnParticle(Particle.REDSTONE, point.getX() + .5, point.getY(), point.getZ() + .5, 0, particleColor(color.getRed()), particleColor(color.getGreen()), particleColor(color.getBlue()), 1);
+				editor.getPlayer().spawnParticle(Particle.REDSTONE, point.getX() - .5, point.getY() + 1, point.getZ() - .5, 0, particleColor(color.getRed()), particleColor(color.getGreen()), particleColor(color.getBlue()), 1);
+				editor.getPlayer().spawnParticle(Particle.REDSTONE, point.getX() - .5, point.getY() + 1, point.getZ() + .5, 0, particleColor(color.getRed()), particleColor(color.getGreen()), particleColor(color.getBlue()), 1);
+				editor.getPlayer().spawnParticle(Particle.REDSTONE, point.getX() + .5, point.getY() + 1, point.getZ() - .5, 0, particleColor(color.getRed()), particleColor(color.getGreen()), particleColor(color.getBlue()), 1);
+				editor.getPlayer().spawnParticle(Particle.REDSTONE, point.getX() + .5, point.getY() + 1, point.getZ() + .5, 0, particleColor(color.getRed()), particleColor(color.getGreen()), particleColor(color.getBlue()), 1);
 
-				if (i < editor.path.length()- 1) {
+				if (i < editor.path.length() - 1) {
 					double xDiff = editor.path.getPoint(i + 1).getX() - point.getX();
 					double yDiff = editor.path.getPoint(i + 1).getY() - point.getY();
 					double zDiff = editor.path.getPoint(i + 1).getZ() - point.getZ();
 					Vector direction = new Vector(xDiff, yDiff, zDiff);
 					for (double d = 0; d < 1; d += 0.1) {
 						Location location = direction.clone().multiply(d).add(new Vector(point.getX(), point.getY(), point.getZ())).toLocation(editor.getPlayer().getWorld());
-						ParticleEffect.REDSTONE.sendColor(Collections.singleton(editor.getPlayer()), location.getX(), location.getY() + .5, location.getZ(), Color.YELLOW);
+						editor.getPlayer().spawnParticle(Particle.REDSTONE,  location.getX(), location.getY() + .5, location.getZ(), 0, particleColor(Color.YELLOW.getRed()), particleColor(Color.YELLOW.getGreen()), particleColor(Color.YELLOW.getBlue()), 1);
 					}
 				}
 			}
 		}
 	}
+
+	double particleColor(double value) {
+		if (value <= 0) {
+			value = -1;
+		}
+		return value / 255;
+	}
+
 }
