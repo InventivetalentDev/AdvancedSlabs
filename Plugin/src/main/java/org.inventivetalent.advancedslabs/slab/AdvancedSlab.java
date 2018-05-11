@@ -29,11 +29,9 @@
 package org.inventivetalent.advancedslabs.slab;
 
 import com.google.gson.JsonObject;
-import net.minecraft.server.v1_12_R1.NBTTagCompound;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftShulker;
 import org.bukkit.entity.*;
 import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
@@ -100,10 +98,6 @@ public class AdvancedSlab implements IPathPassenger, IAdvancedSlab {
 		EntityHelper.setNoAI(getShulker());
 		EntityHelper.makeSilent(getShulker());
 		EntityHelper.setInvulnerable(getShulker());
-
-		NBTTagCompound tag = new NBTTagCompound();
-		((CraftShulker)getShulker()).getHandle().save(tag);
-		System.out.println(tag);
 
 		EntityHelper.addPassenger(getArmorStand(), getShulker());
 	}
