@@ -63,11 +63,6 @@ public class PacketListener {
 						}
 					}
 				}
-				if ("PacketPlayOutTileEntityData".equals(sentPacket.getPacketName())) {
-					System.out.println("a: " + sentPacket.getPacketValue("a"));
-					System.out.println("b: "+sentPacket.getPacketValue("b"));
-					System.out.println("c: " + sentPacket.getPacketValue("c"));
-				}
 			}
 
 			@Override
