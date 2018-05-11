@@ -32,6 +32,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.EntityType;
@@ -71,7 +72,6 @@ import org.inventivetalent.packetlistener.PacketListenerAPI;
 import org.inventivetalent.update.spiget.SpigetUpdate;
 import org.inventivetalent.update.spiget.UpdateCallback;
 import org.inventivetalent.update.spiget.comparator.VersionComparator;
-import org.mcstats.MetricsLite;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -211,10 +211,7 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 		}, 40);
 
 		try {
-			MetricsLite metrics = new MetricsLite(this);
-			if (metrics.start()) {
-				getLogger().info("Metrics started");
-			}
+			new Metrics(this);
 
 			spigetUpdate = new SpigetUpdate(this, 20164).setUserAgent("AdvancedSlabs/" + getDescription().getVersion()).setVersionComparator(VersionComparator.SEM_VER);
 			spigetUpdate.checkForUpdate(new UpdateCallback() {
@@ -353,17 +350,13 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 	}
 
 	public void saveSlabs() {
-		if (slabManager.size() > 0) {
-			JsonArray slabArray = slabManager.toJson();
-			writeJson(slabArray, slabFile);
-		}
+		JsonArray slabArray = slabManager.toJson();
+		writeJson(slabArray, slabFile);
 	}
 
 	public void savePaths() {
-		if (pathManager.size() > 0) {
-			JsonArray pathArray = pathManager.toJson();
-			writeJson(pathArray, pathFile);
-		}
+		JsonArray pathArray = pathManager.toJson();
+		writeJson(pathArray, pathFile);
 	}
 
 	public void loadSlabs() {

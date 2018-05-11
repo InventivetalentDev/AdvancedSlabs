@@ -32,8 +32,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.3</version>
         <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
       <plugin>
@@ -48,7 +48,7 @@
             <configuration>
               <artifactSet>
                 <includes>
-                  <include>org.mcstats.*</include>
+                  <include>org.bstats**</include>
                   <include>org.inventivetalent:reflectionhelper**</include>
                   <include>org.inventivetalent:itembuilder**</include>
                   <include>org.inventivetalent:recipebuilder**</include>
@@ -64,8 +64,8 @@
               </artifactSet>
               <relocations>
                 <relocation>
-                  <pattern>org.mcstats</pattern>
-                  <shadedPattern>org.inventivetalent.advancedslabs.mcstats</shadedPattern>
+                  <pattern>org.bstats</pattern>
+                  <shadedPattern>org.inventivetalent.advancedslabs.bstats</shadedPattern>
                 </relocation>
                 <relocation>
                   <pattern>org.inventivetalent.reflection</pattern>
@@ -81,14 +81,20 @@
   <dependencies>
     <dependency>
       <groupId>org.spigotmc</groupId>
-      <artifactId>spigot</artifactId>
-      <version>1.9-R0.1-SNAPSHOT</version>
+      <artifactId>spigot-api</artifactId>
+      <version>1.12.2-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>bungeecord-chat</artifactId>
+          <groupId>net.md-5</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.bukkit</groupId>
-      <artifactId>craftbukkit</artifactId>
-      <version>1.9-R0.1-SNAPSHOT</version>
+      <artifactId>bukkit</artifactId>
+      <version>1.12.2-R0.1-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>

@@ -40,13 +40,15 @@
         <module>API</module>
         <module>v1_9_R1</module>
         <module>v1_9_R2</module>
-        <module>Plugin</module>
         <module>v1_10_R1</module>
+        <module>v1_12_R1</module>
+        <module>Plugin</module>
+        <module>v1_11_R1</module>
     </modules>
     <name>AdvancedSlabs</name>
 
     <properties>
-        <as.version>1.7.2</as.version>
+        <as.version>1.8.0</as.version>
     </properties>
 
     <build>
@@ -59,6 +61,16 @@
                 </includes>
             </resource>
         </resources>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.3</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 
     <repositories>
@@ -79,16 +91,8 @@
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
         <repository>
-            <id>sk89q-repo</id>
-            <url>http://maven.sk89q.com/artifactory/repo/</url>
-        </repository>
-        <repository>
-            <id>techcable-repo</id>
-            <url>http://repo.techcable.net/content/groups/public/</url>
-        </repository>
-        <repository>
-            <id>mcstats-repo</id>
-            <url>http://repo.mcstats.org/content/groups/public/</url>
+            <id>bstats-repo</id>
+            <url>http://repo.bstats.org/content/repositories/releases/</url>
         </repository>
     </repositories>
     <distributionManagement>

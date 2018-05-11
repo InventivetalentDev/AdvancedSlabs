@@ -37,21 +37,27 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>api</artifactId>
+    <artifactId>v1_12_R1</artifactId>
     <version>${as.version}</version>
 
     <dependencies>
         <dependency>
+            <groupId>org.inventivetalent.advancedslabs</groupId>
+            <artifactId>api</artifactId>
+            <version>${as.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
-            <version>1.12.2-R0.1-SNAPSHOT</version>
+            <version>1.12-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit</artifactId>
-            <version>1.12.2-R0.1-SNAPSHOT</version>
+            <version>1.12-R0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
+
 
 </project>

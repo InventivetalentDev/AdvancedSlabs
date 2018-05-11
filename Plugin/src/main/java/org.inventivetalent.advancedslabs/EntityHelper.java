@@ -34,6 +34,8 @@ import org.inventivetalent.reflection.resolver.MethodResolver;
 import org.inventivetalent.reflection.resolver.ResolverQuery;
 import org.inventivetalent.reflection.resolver.minecraft.NMSClassResolver;
 
+import java.lang.reflect.Method;
+
 public class EntityHelper {
 
 	static NMSClassResolver nmsClassResolver = new NMSClassResolver();
@@ -60,7 +62,8 @@ public class EntityHelper {
 
 	public static void setNoAI(Object entity) {
 		try {
-			EntityInsentientMethodResolver.resolve(new ResolverQuery("m", boolean.class), new ResolverQuery("setAI", boolean.class)).invoke(Minecraft.getHandle(entity), true);
+			Method m = EntityInsentientMethodResolver.resolve(new ResolverQuery("setAI", boolean.class), new ResolverQuery("setNoAI", boolean.class), new ResolverQuery("m", boolean.class));
+			m.invoke(Minecraft.getHandle(entity), true);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

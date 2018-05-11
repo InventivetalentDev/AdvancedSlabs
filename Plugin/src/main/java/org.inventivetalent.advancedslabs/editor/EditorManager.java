@@ -83,7 +83,7 @@ public class EditorManager {
 
 		GlowAPI.Color glowColor = null;
 		if (colorable) {
-			switch (DyeColor.getByData(slab.getMaterialData().getData())) {
+			switch (DyeColor.getByDyeData(slab.getMaterialData().getData())) {
 				case WHITE:
 					glowColor = GlowAPI.Color.WHITE;
 					break;
