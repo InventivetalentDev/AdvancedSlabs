@@ -96,6 +96,7 @@ public class AdvancedSlab implements IPathPassenger, IAdvancedSlab {
 		this.shulker.setCustomNameVisible(false);
 		this.shulker.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, false, false));
 		EntityHelper.setNoAI(getShulker());
+		EntityHelper.clearEntityGoals(getShulker());
 		EntityHelper.makeSilent(getShulker());
 		EntityHelper.setInvulnerable(getShulker());
 

@@ -29,28 +29,31 @@
 package org.inventivetalent.advancedslabs;
 
 import org.inventivetalent.reflection.minecraft.Minecraft;
+import org.inventivetalent.reflection.resolver.ConstructorResolver;
 import org.inventivetalent.reflection.resolver.FieldResolver;
 import org.inventivetalent.reflection.resolver.MethodResolver;
 import org.inventivetalent.reflection.resolver.ResolverQuery;
 import org.inventivetalent.reflection.resolver.minecraft.NMSClassResolver;
 
-import java.lang.reflect.Method;
-
 public class EntityHelper {
 
 	static NMSClassResolver nmsClassResolver = new NMSClassResolver();
 
-	static Class<?> Entity             = nmsClassResolver.resolveSilent("Entity");
-	static Class<?> EntityLiving       = nmsClassResolver.resolveSilent("EntityLiving");
-	static Class<?> EntityInsentient   = nmsClassResolver.resolveSilent("EntityInsentient");
-	static Class<?> EntityShulker      = nmsClassResolver.resolveSilent("EntityShulker");
-	static Class<?> EntityArmorStand   = nmsClassResolver.resolveSilent("EntityArmorStand");
-	static Class<?> EntityFallingBlock = nmsClassResolver.resolveSilent("EntityFallingBlock");
+	static Class<?> Entity                 = nmsClassResolver.resolveSilent("Entity");
+	static Class<?> EntityLiving           = nmsClassResolver.resolveSilent("EntityLiving");
+	static Class<?> EntityInsentient       = nmsClassResolver.resolveSilent("EntityInsentient");
+	static Class<?> EntityShulker          = nmsClassResolver.resolveSilent("EntityShulker");
+	static Class<?> EntityArmorStand       = nmsClassResolver.resolveSilent("EntityArmorStand");
+	static Class<?> EntityFallingBlock     = nmsClassResolver.resolveSilent("EntityFallingBlock");
+	static Class<?> PathfinderGoalSelector = nmsClassResolver.resolveSilent("PathfinderGoalSelector");
 
 	static MethodResolver EntityMethodResolver           = new MethodResolver(Entity);
 	static MethodResolver EntityInsentientMethodResolver = new MethodResolver(EntityInsentient);
 
+	public static FieldResolver EntityInsentientFieldResolver   = new FieldResolver(EntityInsentient);
 	public static FieldResolver EntityFallingBlockFieldResolver = new FieldResolver(EntityFallingBlock);
+
+	static ConstructorResolver PathfinderGoalSelectorConstructorResolver = new ConstructorResolver(PathfinderGoalSelector);
 
 	public static void makeSilent(Object entity) {
 		try {
@@ -62,8 +65,17 @@ public class EntityHelper {
 
 	public static void setNoAI(Object entity) {
 		try {
-			Method m = EntityInsentientMethodResolver.resolve(new ResolverQuery("setAI", boolean.class), new ResolverQuery("setNoAI", boolean.class), new ResolverQuery("m", boolean.class));
-			m.invoke(Minecraft.getHandle(entity), true);
+			EntityInsentientMethodResolver.resolve(new ResolverQuery("setAI", boolean.class), new ResolverQuery("setNoAI", boolean.class), new ResolverQuery("m", boolean.class)).invoke(Minecraft.getHandle(entity), true);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static void clearEntityGoals(Object entity) {
+		try {
+			Object handle = Minecraft.getHandle(entity);
+			EntityInsentientFieldResolver.resolve("goalSelector").set(handle, PathfinderGoalSelectorConstructorResolver.resolveFirstConstructor().newInstance(new Object[] { null }));
+			EntityInsentientFieldResolver.resolve("targetSelector").set(handle, PathfinderGoalSelectorConstructorResolver.resolveFirstConstructor().newInstance(new Object[] { null }));
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
