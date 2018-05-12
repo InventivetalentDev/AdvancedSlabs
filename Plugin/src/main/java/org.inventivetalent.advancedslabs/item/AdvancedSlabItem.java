@@ -47,12 +47,14 @@ public abstract class AdvancedSlabItem {
 	}
 
 	public void tryHandlePrepareCraft(PrepareItemCraftEvent event) {
+		if (event.getRecipe() == null) { return; }
 		if (event.getRecipe().equals(getRecipe())) {
 			handlePrepareCraft(event);
 		}
 	}
 
 	public void tryHandleCraft(CraftItemEvent event) {
+		if (event.getRecipe() == null) { return; }
 		if (event.getRecipe().equals(getRecipe())) {
 			handleCraft(event);
 		}
