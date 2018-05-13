@@ -48,7 +48,7 @@
     <name>AdvancedSlabs</name>
 
     <properties>
-        <as.version>1.8.1-SNAPSHOT</as.version>
+        <as.version>1.8.2-SNAPSHOT</as.version>
     </properties>
 
     <build>
