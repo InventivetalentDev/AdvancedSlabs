@@ -34,12 +34,15 @@ import org.inventivetalent.packetlistener.handler.PacketHandler;
 import org.inventivetalent.packetlistener.handler.PacketOptions;
 import org.inventivetalent.packetlistener.handler.ReceivedPacket;
 import org.inventivetalent.packetlistener.handler.SentPacket;
+import org.inventivetalent.reflection.minecraft.Minecraft;
 
 import java.util.UUID;
 
 public class PacketListener {
 
 	private PacketHandler packetHandler;
+
+	boolean use13 = Minecraft.VERSION.newerThan(Minecraft.Version.v1_13_R1);
 
 	public PacketListener(AdvancedSlabs plugin) {
 		this.packetHandler = new PacketHandler(plugin) {
@@ -49,7 +52,7 @@ public class PacketListener {
 			public void onSend(SentPacket sentPacket) {
 				if ("PacketPlayOutSpawnEntityLiving".equals(sentPacket.getPacketName())) {
 					int c = (int) sentPacket.getPacketValue("c");
-					if (c == 69) {//Shulker
+					if ((use13 && c == 59) || c == 69) {//Shulker
 						UUID b = (UUID) sentPacket.getPacketValue("b");
 						final IAdvancedSlab slab = AdvancedSlabs.instance.slabManager.getSlabForUUID(b);
 						if (slab != null) {

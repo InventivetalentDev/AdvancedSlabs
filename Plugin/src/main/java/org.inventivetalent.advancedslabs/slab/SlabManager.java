@@ -33,6 +33,7 @@ import com.google.gson.JsonElement;
 import lombok.Synchronized;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
 import org.inventivetalent.advancedslabs.AdvancedSlabs;
 import org.inventivetalent.advancedslabs.api.IAdvancedSlab;
@@ -53,13 +54,42 @@ public class SlabManager implements ISlabManager {
 		this.plugin = plugin;
 	}
 
+	@Deprecated
 	@Synchronized
 	@Override
 	public AdvancedSlab createSlab(Location location, Material material, byte data) {
 		AdvancedSlab slab = new AdvancedSlab(location);
 		slab.setMaterial(material, data);
 
-		plugin.getCollisionTeam().addEntry(slab.getShulkerUUID().toString());
+		slabs.add(slab);
+		return slab;
+	}
+
+	@Override
+	public AdvancedSlab createSlab(Location location, BlockData blockData) {
+		return createSlab(location, blockData.getAsString());
+	}
+
+
+	@Synchronized
+	@Override
+	public AdvancedSlab createSlab(Location location, Material material) {
+		AdvancedSlab slab = new AdvancedSlab(location);
+		slab.setMaterial(material);
+
+		slab.getShulker().setCollidable(false);
+
+		slabs.add(slab);
+		return slab;
+	}
+
+	@Synchronized
+	@Override
+	public AdvancedSlab createSlab(Location location, String data) {
+		AdvancedSlab slab = new AdvancedSlab(location);
+		slab.setMaterial(data);
+
+		slab.getShulker().setCollidable(false);
 
 		slabs.add(slab);
 		return slab;

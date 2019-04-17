@@ -28,8 +28,8 @@
 
 package org.inventivetalent.advancedslabs.editor;
 
-import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.inventivetalent.advancedslabs.AdvancedSlabs;
 import org.inventivetalent.advancedslabs.api.IAdvancedSlab;
@@ -42,7 +42,7 @@ import java.util.UUID;
 
 public class EditorManager {
 
-	private AdvancedSlabs plugin;
+	private       AdvancedSlabs          plugin;
 	private final Map<UUID, BlockEditor> editorMap = new HashMap<>();
 
 	public EditorManager(AdvancedSlabs plugin) {
@@ -78,77 +78,47 @@ public class EditorManager {
 	}
 
 	public static void setGlowing(IAdvancedSlab slab, Player receiver) {
-		Material type = slab.getMaterialData().getItemType();
-		boolean colorable = type == Material.STAINED_GLASS_PANE || type == Material.STAINED_GLASS || type == Material.STAINED_CLAY || type == Material.WOOL;
+		BlockData blockData = slab.getBlockData();
+		Material type = blockData.getMaterial();
+		String materialName = type.name();
 
 		GlowAPI.Color glowColor = null;
-		if (colorable) {
-			switch (DyeColor.getByDyeData(slab.getMaterialData().getData())) {
-				case WHITE:
-					glowColor = GlowAPI.Color.WHITE;
-					break;
-				case ORANGE:
-					glowColor = GlowAPI.Color.GOLD;
-					break;
-				case MAGENTA:
-					glowColor = GlowAPI.Color.DARK_PURPLE;
-					break;
-				case LIGHT_BLUE:
-					glowColor = GlowAPI.Color.BLUE;
-					break;
-				case YELLOW:
-					glowColor = GlowAPI.Color.YELLOW;
-					break;
-				case LIME:
-					glowColor = GlowAPI.Color.GREEN;
-					break;
-				case PINK:
-					glowColor = GlowAPI.Color.PURPLE;
-					break;
-				case GRAY:
-					glowColor = GlowAPI.Color.DARK_GRAY;
-					break;
-				case SILVER:
-					glowColor = GlowAPI.Color.GRAY;
-					break;
-				case CYAN:
-					glowColor = GlowAPI.Color.AQUA;
-					break;
-				case PURPLE:
-					glowColor = GlowAPI.Color.RED;
-					break;
-				case BLUE:
-					glowColor = GlowAPI.Color.DARK_BLUE;
-					break;
-				case BROWN:
-					glowColor = GlowAPI.Color.DARK_RED;
-					break;
-				case GREEN:
-					glowColor = GlowAPI.Color.DARK_GREEN;
-					break;
-				case RED:
-					glowColor = GlowAPI.Color.DARK_RED;
-					break;
-				case BLACK:
-					glowColor = GlowAPI.Color.BLUE;
-					break;
-			}
+		if (materialName.startsWith("WHITE_")) {
+			glowColor = GlowAPI.Color.WHITE;
+		} else if (materialName.startsWith("ORANGE_") || materialName.startsWith("GOLD_")) {
+			glowColor = GlowAPI.Color.GOLD;
+		} else if (materialName.startsWith("MAGENTA_") || materialName.startsWith("DARK_PURPLE_")) {
+			glowColor = GlowAPI.Color.DARK_PURPLE;
+		} else if (materialName.startsWith("LIGHT_BLUE_") || materialName.startsWith("BLUE_")) {
+			glowColor = GlowAPI.Color.BLUE;
+		} else if (materialName.startsWith("YELLOW_")) {
+			glowColor = GlowAPI.Color.YELLOW;
+		} else if (materialName.startsWith("LIME_") || materialName.startsWith("GREEN_")) {
+			glowColor = GlowAPI.Color.GREEN;
+		} else if (materialName.startsWith("PINK_") || materialName.startsWith("PURPLE_")) {
+			glowColor = GlowAPI.Color.PURPLE;
+		} else if (materialName.startsWith("DARK_GRAY_")) {
+			glowColor = GlowAPI.Color.DARK_GRAY;
+		} else if (materialName.startsWith("GRAY_")) {
+			glowColor = GlowAPI.Color.GRAY;
+		} else if (materialName.startsWith("CYAN_") || materialName.startsWith("AQUA_")) {
+			glowColor = GlowAPI.Color.AQUA;
+		} else if (materialName.startsWith("RED_")) {
+			glowColor = GlowAPI.Color.RED;
+		} else if (materialName.startsWith("BLACK_")) {
+			glowColor = GlowAPI.Color.BLACK;
 		} else {
+			//TODO: add more types
 			switch (type) {
 				case STONE:
 				case COBBLESTONE:
 				case COBBLESTONE_STAIRS:
 				case MOSSY_COBBLESTONE:
-				case COBBLE_WALL:
 					glowColor = GlowAPI.Color.GRAY;
 					break;
 				case FURNACE:
 				case DROPPER:
 				case DISPENSER:
-				case PISTON_BASE:
-				case PISTON_EXTENSION:
-				case PISTON_STICKY_BASE:
-				case PISTON_MOVING_PIECE:
 					glowColor = GlowAPI.Color.DARK_GRAY;
 					break;
 				case SPONGE:
@@ -157,9 +127,6 @@ public class EditorManager {
 				case SANDSTONE_STAIRS:
 				case GLOWSTONE:
 				case HAY_BLOCK:
-				case END_BRICKS:
-				case ENDER_STONE:
-				case REDSTONE_LAMP_ON:
 					glowColor = GlowAPI.Color.YELLOW;
 					break;
 				case RED_SANDSTONE:
@@ -170,22 +137,16 @@ public class EditorManager {
 					break;
 				case BRICK:
 				case BRICK_STAIRS:
-				case CLAY_BRICK:
 				case REDSTONE_ORE:
 				case REDSTONE_BLOCK:
 					glowColor = GlowAPI.Color.RED;
 					break;
 				case DIRT:
-				case LOG:
-				case LOG_2:
-				case WOOD:
 				case SOUL_SAND:
 				case CHEST:
 				case TRAPPED_CHEST:
 				case JUKEBOX:
 				case NOTE_BLOCK:
-				case WORKBENCH:
-				case REDSTONE_LAMP_OFF:
 					glowColor = GlowAPI.Color.DARK_RED;
 					break;
 				case LAPIS_BLOCK:
@@ -196,8 +157,6 @@ public class EditorManager {
 				case EMERALD_BLOCK:
 				case EMERALD_ORE:
 				case CACTUS:
-				case LEAVES:
-				case LEAVES_2:
 				case SLIME_BLOCK:
 					glowColor = GlowAPI.Color.GREEN;
 					break;
@@ -211,7 +170,6 @@ public class EditorManager {
 					glowColor = GlowAPI.Color.AQUA;
 					break;
 				case PURPUR_BLOCK:
-				case PURPUR_DOUBLE_SLAB:
 				case PURPUR_PILLAR:
 				case PURPUR_SLAB:
 				case PURPUR_STAIRS:
@@ -220,7 +178,6 @@ public class EditorManager {
 				case OBSIDIAN:
 				case NETHER_BRICK:
 				case NETHER_BRICK_STAIRS:
-				case NETHER_FENCE:
 				case ENDER_CHEST:
 					glowColor = GlowAPI.Color.BLACK;
 					break;

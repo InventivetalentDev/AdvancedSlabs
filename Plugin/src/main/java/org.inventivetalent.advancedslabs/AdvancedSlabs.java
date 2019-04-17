@@ -48,7 +48,6 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scoreboard.Team;
 import org.inventivetalent.advancedslabs.api.AdvancedSlabsAPI;
 import org.inventivetalent.advancedslabs.api.IAdvancedSlab;
 import org.inventivetalent.advancedslabs.api.ISlabManager;
@@ -69,6 +68,7 @@ import org.inventivetalent.glow.GlowAPI;
 import org.inventivetalent.messagebuilder.MessageBuilder;
 import org.inventivetalent.messagebuilder.MessageContainer;
 import org.inventivetalent.packetlistener.PacketListenerAPI;
+import org.inventivetalent.reflection.minecraft.Minecraft;
 import org.inventivetalent.update.spiget.SpigetUpdate;
 import org.inventivetalent.update.spiget.UpdateCallback;
 import org.inventivetalent.update.spiget.comparator.VersionComparator;
@@ -127,6 +127,10 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 	@Override
 	public void onEnable() {
 		instance = this;
+
+		if (Minecraft.VERSION.olderThan(Minecraft.Version.v1_13_R2)) {
+			getLogger().log(Level.WARNING, "This version of the plugin is intended to be used with 1.13.2+! Please use a version older than 1.9.0 for older MC versions.");
+		}
 
 		APIManager.initAPI(PacketListenerAPI.class);
 		APIManager.initAPI(GlowAPI.class);
@@ -338,15 +342,6 @@ public class AdvancedSlabs extends JavaPlugin implements Listener {
 				}
 			}
 		}
-	}
-
-	public Team getCollisionTeam() {
-		Team team = Bukkit.getScoreboardManager().getMainScoreboard().getTeam("advslabcoll");
-		if (team == null) {
-			team = Bukkit.getScoreboardManager().getMainScoreboard().registerNewTeam("advslabcoll");
-			team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
-		}
-		return team;
 	}
 
 	public void saveSlabs() {

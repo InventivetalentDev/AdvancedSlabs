@@ -36,6 +36,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.inventivetalent.advancedslabs.AdvancedSlabs;
 import org.inventivetalent.advancedslabs.api.IAdvancedSlab;
 import org.inventivetalent.advancedslabs.api.path.IPathPoint;
@@ -43,26 +44,29 @@ import org.inventivetalent.advancedslabs.api.path.ISlabPath;
 import org.inventivetalent.advancedslabs.movement.path.PathPoint;
 import org.inventivetalent.advancedslabs.movement.path.editor.PathEditor;
 import org.inventivetalent.advancedslabs.slab.AdvancedSlab;
-import org.inventivetalent.itembuilder.ItemBuilder;
-import org.inventivetalent.recipebuilder.ShapedRecipeBuilder;
+
+import java.util.Arrays;
 
 public class PathWand extends AdvancedSlabItem {
 
 	@Override
 	public ItemStack getItem() {
-		return//
-				new ItemBuilder()//
-						.withType(Material.LEASH).buildMeta().withDisplayName("§6Path Wand").withLore("&7Right-Click to edit a path", /*"&7Left-Click to stop editing",*/ "&7Shift right-click to add a point", "&7Shift left-click to remove a point", " ", "&7Shift left-click in air to reset").item()//
-						.fromConfig(AdvancedSlabs.instance.getConfig().getConfigurationSection("items.movement.path.wand"))//
-						.build();
+		ItemStack itemStack = new ItemStack(Material.LEAD);
+		ItemMeta meta = itemStack.getItemMeta();
+		meta.setDisplayName("§6Path Wand");
+		meta.setLore(Arrays.asList("§7Right-Click to edit a path", /*"§7Left-Click to stop editing",*/ "§7Shift right-click to add a point", "§7Shift left-click to remove a point", " ", "§7Shift left-click in air to reset"));
+		itemStack.setItemMeta(meta);
+
+		return itemStack;
 	}
 
 	@Override
 	public Recipe getRecipe() {
-		return //
-				new ShapedRecipeBuilder(getItem()).withShape("rdr", "dld", "rdr").withIngredient('r', Material.REDSTONE).withIngredient('d', Material.DIAMOND).withIngredient('l', Material.LEASH)//
-						.fromConfig(AdvancedSlabs.instance.getConfig().getConfigurationSection("recipes.movement.path.wand"))//
-						.build();
+		return null;
+//		return //
+//				new ShapedRecipeBuilder(getItem()).withShape("rdr", "dld", "rdr").withIngredient('r', Material.REDSTONE).withIngredient('d', Material.DIAMOND).withIngredient('l', Material.LEAD)//
+//						.fromConfig(AdvancedSlabs.instance.getConfig().getConfigurationSection("recipes.movement.path.wand"))//
+//						.build();
 	}
 
 	@Override

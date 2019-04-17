@@ -2,6 +2,7 @@ name: AdvancedSlabs
 main: org.inventivetalent.advancedslabs.AdvancedSlabs
 author: inventivetalent
 version: ${project.version}
+api-version: 1.13
 
 softdepend: [PacketListenerApi, MenuBuilder, ItemBuilder, RecipeBuilder, MessageBuilder, GlowAPI, ReflectionHelper, APIManager]
 

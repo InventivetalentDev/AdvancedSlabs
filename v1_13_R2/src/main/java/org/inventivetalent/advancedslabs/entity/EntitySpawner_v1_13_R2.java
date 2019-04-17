@@ -28,17 +28,12 @@
 
 package org.inventivetalent.advancedslabs.entity;
 
-import com.google.common.base.Preconditions;
-import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.server.v1_13_R2.ArgumentBlock;
 import net.minecraft.server.v1_13_R2.Block;
 import net.minecraft.server.v1_13_R2.IBlockData;
-import net.minecraft.server.v1_13_R2.IRegistry;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_13_R2.util.CraftMagicNumbers;
+import org.bukkit.craftbukkit.v1_13_R2.block.data.CraftBlockData;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
 public class EntitySpawner_v1_13_R2 implements IEntitySpawner {
@@ -47,28 +42,7 @@ public class EntitySpawner_v1_13_R2 implements IEntitySpawner {
 	public ISlabFallingBlock spawnFallingBlock(Location location, Material material, String data) {
 		// From CraftBlockData
 
-		IBlockData blockData;
-		Block block = CraftMagicNumbers.getBlock(material);
-
-		// Data provided, use it
-		if (data != null) {
-			try {
-				// Material provided, force that material in
-				if (block != null) {
-					data = IRegistry.BLOCK.getKey(block) + data;
-				}
-
-				StringReader reader = new StringReader(data);
-				ArgumentBlock arg = new ArgumentBlock(reader, false).a(false);
-				Preconditions.checkArgument(!reader.canRead(), "Spurious trailing data");
-
-				blockData = arg.getBlockData();
-			} catch (CommandSyntaxException ex) {
-				throw new IllegalArgumentException("Could not parse data: " + data, ex);
-			}
-		} else {
-			blockData = block.getBlockData();
-		}
+		IBlockData blockData = CraftBlockData.newData(material,data).getState();
 
 		SlabEntityFallingSand_v1_13_R2 entity = new SlabEntityFallingSand_v1_13_R2(((CraftWorld) location.getWorld()).getHandle(), location.getX(), location.getY(), location.getZ(), blockData);
 		((CraftWorld) location.getWorld()).getHandle().addEntity(entity, CreatureSpawnEvent.SpawnReason.CUSTOM);

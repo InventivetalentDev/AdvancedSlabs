@@ -44,7 +44,6 @@ import org.inventivetalent.advancedslabs.editor.EditorManager;
 import org.inventivetalent.advancedslabs.item.ItemManager;
 import org.inventivetalent.advancedslabs.movement.path.editor.PathEditor;
 import org.inventivetalent.glow.GlowAPI;
-import org.inventivetalent.itembuilder.ItemBuilder;
 
 import java.util.*;
 
@@ -145,33 +144,24 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 		if ("give".equalsIgnoreCase(args[0])) {
 			if (sender.hasPermission("advancedslabs.give")) {
 				if (args.length == 1) {
-					sender.sendMessage("§a/aslab give <Material>[:Data] [Player]");
+					sender.sendMessage("§a/aslab give <Material>[Data] [Player]");
 					return false;
 				}
 				String materialString = args[1];
-				String dataString = "0";
-				if (materialString.contains(":")) {
-					String[] split = materialString.split(":");
+				String dataString = "";
+				if (materialString.contains("[")) {
+					String[] split = materialString.split("\\[");
 					materialString = split[0];
-					dataString = split[1];
+					dataString = "["+split[1];
 				}
 				Material material = null;
-				byte data = 0;
 				try {
-					try {
-						material = Material.getMaterial(Integer.parseInt(materialString));
-					} catch (NumberFormatException e) {
-						material = Material.valueOf(materialString.toUpperCase());
-					}
+						material = Material.matchMaterial(materialString);
 				} catch (Exception e) {
 				}
 				if (material == null) {
 					sender.sendMessage(plugin.messages.getMessage("invalidMaterial", materialString));
 					return false;
-				}
-				try {
-					data = Byte.parseByte(dataString);
-				} catch (NumberFormatException e) {
 				}
 
 				Player target;
@@ -189,14 +179,14 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 					target = (Player) sender;
 				}
 
-				ItemStack slabBlock = new ItemStack(material, 1, data);
+				ItemStack slabBlock = new ItemStack(material, 1);
 				ItemMeta meta = slabBlock.getItemMeta();
-				meta.setDisplayName(AdvancedSlabs.instance.messages.getMessage("blockPrefix") + material.name() + (data > 0 ? ":" + data : ""));
+				meta.setDisplayName(AdvancedSlabs.instance.messages.getMessage("blockPrefix") + material.name() + (dataString.length() > 0 ? dataString : ""));
 				slabBlock.setItemMeta(meta);
-				try {
-					slabBlock = new ItemBuilder(slabBlock).buildMeta().glow().item().build();
-				} catch (Exception e) {
-				}
+//				try {
+//					slabBlock = new ItemBuilder(slabBlock).buildMeta().glow().item().build();
+//				} catch (Exception e) {
+//				}
 
 				target.getWorld().dropItemNaturally(target.getLocation(), slabBlock).setPickupDelay(0);
 				return true;

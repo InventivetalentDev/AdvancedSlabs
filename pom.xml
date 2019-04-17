@@ -43,13 +43,13 @@
         <module>v1_10_R1</module>
         <module>v1_11_R1</module>
         <module>v1_12_R1</module>
-        <module>Plugin</module>
         <module>v1_13_R2</module>
+        <module>Plugin</module>
     </modules>
     <name>AdvancedSlabs</name>
 
     <properties>
-        <as.version>1.8.2-SNAPSHOT</as.version>
+        <as.version>1.9.0-SNAPSHOT</as.version>
     </properties>
 
     <build>
@@ -92,8 +92,8 @@
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
         <repository>
-            <id>bstats-repo</id>
-            <url>http://repo.bstats.org/content/repositories/releases/</url>
+            <id>CodeMC</id>
+            <url>https://repo.codemc.org/repository/maven-public</url>
         </repository>
     </repositories>
     <distributionManagement>

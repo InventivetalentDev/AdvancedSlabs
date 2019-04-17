@@ -41,25 +41,28 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.inventivetalent.advancedslabs.AdvancedSlabs;
 import org.inventivetalent.advancedslabs.api.IAdvancedSlab;
-import org.inventivetalent.itembuilder.ItemBuilder;
-import org.inventivetalent.recipebuilder.ShapedRecipeBuilder;
+
+import java.util.Arrays;
 
 public class EditorWand extends AdvancedSlabItem {
 	@Override
 	public ItemStack getItem() {
-		return//
-				new ItemBuilder()//
-						.withType(Material.STICK).buildMeta().withDisplayName("§aEditor Wand").withLore("§7Right-Click Blocks to edit!").item()//
-						.fromConfig(AdvancedSlabs.instance.getConfig().getConfigurationSection("items.editor.wand"))//
-						.build();
+		ItemStack itemStack = new ItemStack(Material.STICK);
+		ItemMeta meta = itemStack.getItemMeta();
+		meta.setDisplayName("§aEditor Wand");
+		meta.setLore(Arrays.asList("§7Right-Click Blocks to edit!"));
+		itemStack.setItemMeta(meta);
+
+		return itemStack;
 	}
 
 	@Override
 	public Recipe getRecipe() {
-		return //
-				new ShapedRecipeBuilder(getItem()).withShape("rdr", "rsr", " s ").withIngredient('r', Material.REDSTONE).withIngredient('s', Material.STICK)//
-						.fromConfig(AdvancedSlabs.instance.getConfig().getConfigurationSection("recipes.editor.wand"))//
-						.build();
+		return null;
+//		return //
+//				new ShapedRecipeBuilder(getItem()).withShape("rdr", "rsr", " s ").withIngredient('r', Material.REDSTONE).withIngredient('s', Material.STICK)//
+//						.fromConfig(AdvancedSlabs.instance.getConfig().getConfigurationSection("recipes.editor.wand"))//
+//						.build();
 	}
 
 	@Override
@@ -126,10 +129,10 @@ public class EditorWand extends AdvancedSlabItem {
 				ItemMeta meta = slabBlock.getItemMeta();
 				meta.setDisplayName(AdvancedSlabs.instance.messages.getMessage("blockPrefix") + blockType.name() + (blockData > 0 ? ":" + blockData : ""));
 				slabBlock.setItemMeta(meta);
-				try {
-					slabBlock = new ItemBuilder(slabBlock).buildMeta().glow().item().build();
-				} catch (Exception e) {
-				}
+//				try {
+//					slabBlock = new ItemBuilder(slabBlock).buildMeta().glow().item().build();
+//				} catch (Exception e) {
+//				}
 
 				for (int i = 0; i < AdvancedSlabs.instance.getConfig().getInt("slabRatio"); i++) {
 					event.getClickedBlock().getWorld().dropItemNaturally(event.getClickedBlock().getLocation().add(.5, .5, .5), slabBlock).setPickupDelay(0);
@@ -153,10 +156,9 @@ public class EditorWand extends AdvancedSlabItem {
 				AdvancedSlabs.instance.editorManager.removeEditor(event.getPlayer().getUniqueId());
 				AdvancedSlabs.instance.slabManager.removeSlab(slab);
 
-				Material blockType = slab.getMaterialData().getItemType();
-				byte blockData = slab.getMaterialData().getData();
+				Material blockType = slab.getBlockData().getMaterial();
 
-				final ItemStack defaultBlock = new ItemStack(blockType, 1, blockData);
+				final ItemStack defaultBlock = new ItemStack(blockType, 1);
 				Bukkit.getScheduler().runTaskLater(AdvancedSlabs.instance, new Runnable() {
 					@Override
 					public void run() {

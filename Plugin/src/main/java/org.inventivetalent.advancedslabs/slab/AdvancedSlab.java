@@ -29,9 +29,11 @@
 package org.inventivetalent.advancedslabs.slab;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.*;
 import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
@@ -44,7 +46,7 @@ import org.inventivetalent.advancedslabs.api.path.IPathPassenger;
 import org.inventivetalent.advancedslabs.entity.ISlabFallingBlock;
 import org.inventivetalent.reflection.minecraft.Minecraft;
 
-import javax.annotation.Nullable;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -55,7 +57,10 @@ public class AdvancedSlab implements IPathPassenger, IAdvancedSlab {
 	private       UUID     fallingBlockUUID;
 	private       Location location;
 
+	@Deprecated
 	private MaterialData materialData;
+
+	private BlockData blockData;
 
 	private ArmorStand        armorStand;
 	private Shulker           shulker;
@@ -107,7 +112,13 @@ public class AdvancedSlab implements IPathPassenger, IAdvancedSlab {
 	public AdvancedSlab(JsonObject jsonObject) {
 		JsonObject locationObject = jsonObject.get("location").getAsJsonObject();
 		this.location = new Location(Bukkit.getWorld(locationObject.get("world").getAsString()), locationObject.get("x").getAsDouble(), locationObject.get("y").getAsDouble(), locationObject.get("z").getAsDouble());
-		this.materialData = new MaterialData(Material.valueOf(jsonObject.get("material").getAsString()), jsonObject.get("data").getAsByte());
+		JsonPrimitive dataElement = jsonObject.get("data").getAsJsonPrimitive();
+		if (dataElement.isNumber()) {
+			this.materialData = new MaterialData(Material.valueOf(jsonObject.get("material").getAsString()), jsonObject.get("data").getAsByte());
+			this.blockData = Bukkit.getServer().createBlockData(Material.valueOf(jsonObject.get("material").getAsString()));
+		} else {
+			this.blockData = Bukkit.getServer().createBlockData(jsonObject.get("data").getAsString());
+		}
 		this.armorStandUUID = UUID.fromString(jsonObject.get("armorstand").getAsString());
 		this.shulkerUUID = UUID.fromString(jsonObject.get("shulker").getAsString());
 		this.fallingBlockUUID = UUID.fromString(jsonObject.get("fallingblock").getAsString());
@@ -124,8 +135,10 @@ public class AdvancedSlab implements IPathPassenger, IAdvancedSlab {
 		}
 
 		refreshEntities();
+		reStackEntities();
 	}
 
+	@Deprecated
 	public void setMaterial(Material material, byte data) {
 		if (getFallingBlock() != null) {
 			getFallingBlock().stopRiding();
@@ -149,10 +162,67 @@ public class AdvancedSlab implements IPathPassenger, IAdvancedSlab {
 		}
 	}
 
+	public void setMaterial(Material material) {
+		if (getFallingBlock() != null) {
+			getFallingBlock().stopRiding();
+			getFallingBlock().allowDeath();
+			getFallingBlock().remove();
+		}
+
+		this.blockData = Bukkit.getServer().createBlockData(material);
+		this.materialData = new MaterialData(material);
+		this.fallingBlockUUID = (this.fallingBlock = spawnFallingBlock(this.location, material, "")).getUniqueId();
+		this.fallingBlock.setTicksLived(2);
+		this.fallingBlock.setDropItem(false);
+		this.fallingBlock.setCustomName("advancedslab");
+		this.fallingBlock.setCustomNameVisible(false);
+
+		if (getArmorStand() != null) {
+			try {
+				getFallingBlock().setRiding(Minecraft.getHandle(getArmorStand()));
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+	}
+
+	public void setMaterial(String data) {
+		if (getFallingBlock() != null) {
+			getFallingBlock().stopRiding();
+			getFallingBlock().allowDeath();
+			getFallingBlock().remove();
+		}
+
+		this.blockData = Bukkit.getServer().createBlockData(data);
+		this.fallingBlockUUID = (this.fallingBlock = spawnFallingBlock(this.location, null, data)).getUniqueId();
+		this.fallingBlock.setTicksLived(2);
+		this.fallingBlock.setDropItem(false);
+		this.fallingBlock.setCustomName("advancedslab");
+		this.fallingBlock.setCustomNameVisible(false);
+
+		if (getArmorStand() != null) {
+			try {
+				getFallingBlock().setRiding(Minecraft.getHandle(getArmorStand()));
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+	}
+
+	ISlabFallingBlock spawnFallingBlock(Location location, Material material, String data) {
+		return AdvancedSlabs.instance.entityManager.spawnFallingBlock(location, material, data);
+	}
+
 	ISlabFallingBlock spawnFallingBlock(Location location, Material material, byte data) {
 		return AdvancedSlabs.instance.entityManager.spawnFallingBlock(location, material, data);
 	}
 
+	@Override
+	public BlockData getBlockData() {
+		return blockData;
+	}
+
+	@Deprecated
 	@Override
 	public MaterialData getMaterialData() {
 		return materialData;
@@ -174,19 +244,19 @@ public class AdvancedSlab implements IPathPassenger, IAdvancedSlab {
 	}
 
 	@Override
-	@Nullable
+
 	public Shulker getShulker() {
 		return shulker;
 	}
 
 	@Override
-	@Nullable
+
 	public ArmorStand getArmorStand() {
 		return armorStand;
 	}
 
 	@Override
-	@Nullable
+
 	public ISlabFallingBlock getFallingBlock() {
 		return fallingBlock;
 	}
@@ -240,7 +310,7 @@ public class AdvancedSlab implements IPathPassenger, IAdvancedSlab {
 	public void respawnFallingBlock() {
 		if (despawned) { return; }
 
-		setMaterial(getMaterialData().getItemType(), getMaterialData().getData());
+		setMaterial( getBlockData().getAsString());
 	}
 
 	@Override
@@ -298,8 +368,8 @@ public class AdvancedSlab implements IPathPassenger, IAdvancedSlab {
 		locationObject.addProperty("z", getLocation().getZ());
 
 		jsonObject.add("location", locationObject);
-		jsonObject.addProperty("material", getMaterialData().getItemType().name());
-		jsonObject.addProperty("data", getMaterialData().getData());
+		jsonObject.addProperty("material", getBlockData().getMaterial().name());
+		jsonObject.addProperty("data", getBlockData().getAsString());
 
 		jsonObject.addProperty("shulker", shulkerUUID.toString());
 		jsonObject.addProperty("armorstand", armorStandUUID.toString());
@@ -319,22 +389,23 @@ public class AdvancedSlab implements IPathPassenger, IAdvancedSlab {
 	public boolean equals(Object o) {
 		if (this == o) { return true; }
 		if (o == null || getClass() != o.getClass()) { return false; }
-
-		AdvancedSlab slab = (AdvancedSlab) o;
-
-		if (armorStandUUID != null ? !armorStandUUID.equals(slab.armorStandUUID) : slab.armorStandUUID != null) { return false; }
-		if (shulkerUUID != null ? !shulkerUUID.equals(slab.shulkerUUID) : slab.shulkerUUID != null) { return false; }
-		if (fallingBlockUUID != null ? !fallingBlockUUID.equals(slab.fallingBlockUUID) : slab.fallingBlockUUID != null) { return false; }
-		return materialData != null ? materialData.equals(slab.materialData) : slab.materialData == null;
-
+		AdvancedSlab that = (AdvancedSlab) o;
+		return path == that.path &&
+				pathPointIndex == that.pathPointIndex &&
+				despawned == that.despawned &&
+				Objects.equals(armorStandUUID, that.armorStandUUID) &&
+				Objects.equals(shulkerUUID, that.shulkerUUID) &&
+				Objects.equals(fallingBlockUUID, that.fallingBlockUUID) &&
+				Objects.equals(location, that.location) &&
+				Objects.equals(blockData, that.blockData) &&
+				Objects.equals(armorStand, that.armorStand) &&
+				Objects.equals(shulker, that.shulker) &&
+				Objects.equals(fallingBlock, that.fallingBlock) &&
+				Objects.equals(owner, that.owner);
 	}
 
 	@Override
 	public int hashCode() {
-		int result = armorStandUUID != null ? armorStandUUID.hashCode() : 0;
-		result = 31 * result + (shulkerUUID != null ? shulkerUUID.hashCode() : 0);
-		result = 31 * result + (fallingBlockUUID != null ? fallingBlockUUID.hashCode() : 0);
-		result = 31 * result + (materialData != null ? materialData.hashCode() : 0);
-		return result;
+		return Objects.hash(armorStandUUID, shulkerUUID, fallingBlockUUID, location, blockData, armorStand, shulker, fallingBlock, owner, path, pathPointIndex, despawned);
 	}
 }

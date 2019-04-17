@@ -30,6 +30,7 @@ package org.inventivetalent.advancedslabs;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 import org.inventivetalent.advancedslabs.entity.IEntitySpawner;
 import org.inventivetalent.advancedslabs.entity.ISlabFallingBlock;
 import org.inventivetalent.reflection.minecraft.Minecraft;
@@ -64,6 +65,15 @@ public class EntityManager {
 		}
 	}
 
+	public ISlabFallingBlock spawnFallingBlock(Location location, BlockData blockData) {
+		return this.spawner.spawnFallingBlock(location, blockData.getMaterial(), blockData.getAsString());
+	}
+
+	public ISlabFallingBlock spawnFallingBlock(Location location, Material material, String data) {
+		return this.spawner.spawnFallingBlock(location, material, data);
+	}
+
+	@Deprecated
 	public ISlabFallingBlock spawnFallingBlock(Location location, Material material, byte data) {
 		return this.spawner.spawnFallingBlock(location, material, data);
 	}
