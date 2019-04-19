@@ -62,7 +62,6 @@ public class PathParticleTask extends BukkitRunnable {
 				IPathPoint point = editor.path.getPoint(i);
 				Color color = i == 0 ? Color.LIME : i == editor.path.length() - 1 ? Color.RED : Color.BLUE;
 
-
 				//Center
 				editor.getPlayer().spawnParticle(Particle.REDSTONE, point.getX(), point.getY() + .5, point.getZ(), 0, new Particle.DustOptions(color, 1));
 

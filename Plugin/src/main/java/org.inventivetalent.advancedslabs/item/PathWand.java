@@ -29,6 +29,7 @@
 package org.inventivetalent.advancedslabs.item;
 
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -36,6 +37,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.inventivetalent.advancedslabs.AdvancedSlabs;
 import org.inventivetalent.advancedslabs.api.IAdvancedSlab;
@@ -62,11 +64,11 @@ public class PathWand extends AdvancedSlabItem {
 
 	@Override
 	public Recipe getRecipe() {
-		return null;
-//		return //
-//				new ShapedRecipeBuilder(getItem()).withShape("rdr", "dld", "rdr").withIngredient('r', Material.REDSTONE).withIngredient('d', Material.DIAMOND).withIngredient('l', Material.LEAD)//
-//						.fromConfig(AdvancedSlabs.instance.getConfig().getConfigurationSection("recipes.movement.path.wand"))//
-//						.build();
+		return new ShapedRecipe(new NamespacedKey(AdvancedSlabs.instance,"path_wand"),getItem())
+				.shape("rdr","dld","rdr")
+				.setIngredient('r',Material.REDSTONE)
+				.setIngredient('d',Material.DIAMOND)
+				.setIngredient('l',Material.LEAD);
 	}
 
 	@Override

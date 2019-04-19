@@ -31,6 +31,7 @@ package org.inventivetalent.advancedslabs.item;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
@@ -38,6 +39,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.inventivetalent.advancedslabs.AdvancedSlabs;
 import org.inventivetalent.advancedslabs.api.IAdvancedSlab;
@@ -58,11 +60,11 @@ public class EditorWand extends AdvancedSlabItem {
 
 	@Override
 	public Recipe getRecipe() {
-		return null;
-//		return //
-//				new ShapedRecipeBuilder(getItem()).withShape("rdr", "rsr", " s ").withIngredient('r', Material.REDSTONE).withIngredient('s', Material.STICK)//
-//						.fromConfig(AdvancedSlabs.instance.getConfig().getConfigurationSection("recipes.editor.wand"))//
-//						.build();
+		return new ShapedRecipe(new NamespacedKey(AdvancedSlabs.instance, "editor_wand"), getItem())
+				.shape("rdr","rsr"," s ")
+				.setIngredient('r',Material.REDSTONE)
+				.setIngredient('s',Material.STICK)
+				.setIngredient('d',Material.DIAMOND);
 	}
 
 	@Override
