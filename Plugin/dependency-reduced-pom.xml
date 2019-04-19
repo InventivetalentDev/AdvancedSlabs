@@ -50,7 +50,7 @@
                 <includes>
                   <include>org.bstats**</include>
                   <include>org.inventivetalent:reflectionhelper**</include>
-                  <include>org.inventivetalent:itembuilder**</include>
+                  <include>org.inventivetalent:item-builder**</include>
                   <include>org.inventivetalent:recipebuilder**</include>
                   <include>org.inventivetalent:messagebuilder**</include>
                   <include>org.inventivetalent:apimanager**</include>

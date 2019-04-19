@@ -49,7 +49,7 @@
     <name>AdvancedSlabs</name>
 
     <properties>
-        <as.version>1.9.0-SNAPSHOT</as.version>
+        <as.version>1.9.1-SNAPSHOT</as.version>
     </properties>
 
     <build>
