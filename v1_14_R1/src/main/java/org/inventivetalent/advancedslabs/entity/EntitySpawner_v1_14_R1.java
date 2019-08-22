@@ -26,7 +26,7 @@
  *  either expressed or implied, of anybody else.
  */
 
-package entity;
+package org.inventivetalent.advancedslabs.entity;
 
 import net.minecraft.server.v1_14_R1.Block;
 import net.minecraft.server.v1_14_R1.IBlockData;
@@ -35,8 +35,6 @@ import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_14_R1.block.data.CraftBlockData;
 import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.inventivetalent.advancedslabs.entity.IEntitySpawner;
-import org.inventivetalent.advancedslabs.entity.ISlabFallingBlock;
 
 public class EntitySpawner_v1_14_R1 implements IEntitySpawner {
 

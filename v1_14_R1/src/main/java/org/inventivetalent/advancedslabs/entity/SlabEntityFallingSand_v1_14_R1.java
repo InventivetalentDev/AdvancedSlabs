@@ -26,7 +26,7 @@
  *  either expressed or implied, of anybody else.
  */
 
-package entity;
+package org.inventivetalent.advancedslabs.entity;
 
 import net.minecraft.server.v1_14_R1.*;
 import org.bukkit.Location;
