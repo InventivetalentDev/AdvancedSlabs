@@ -326,6 +326,10 @@ public class AdvancedSlab implements IPathPassenger, IAdvancedSlab {
 				if (entity.getUniqueId().equals(this.fallingBlockUUID)) { this.fallingBlock = (ISlabFallingBlock) entity; }
 			}
 		}
+
+		if (this.fallingBlockUUID != null && this.fallingBlock == null) {
+			this.respawnFallingBlock();
+		}
 	}
 
 	@Override
