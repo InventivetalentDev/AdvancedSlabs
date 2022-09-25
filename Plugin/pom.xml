@@ -185,7 +185,7 @@
         <dependency>
             <groupId>org.inventivetalent.packetlistener</groupId>
             <artifactId>1_7</artifactId>
-            <version>3.7.5-SNAPSHOT</version>
+            <version>3.7.9-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.inventivetalent.packetlistener</groupId>
